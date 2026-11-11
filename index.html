@@ -27,7 +27,9 @@ a{color:var(--indigo)}
 .wrap{width:min(1120px,100% - 32px);margin-inline:auto}
 
 /* topo */
-.topo{position:sticky;top:0;z-index:10;background:var(--indigo);color:#fff}
+.topo{position:sticky;top:0;z-index:10;background:var(--indigo);background:linear-gradient(90deg,var(--indigo) 0%,var(--hibisco) 100%);color:#fff;box-shadow:0 2px 0 rgba(29,10,110,.25)}
+.topo .marca{display:inline-flex;align-items:center;gap:10px}
+.topo .marca img{width:36px;height:36px;border-radius:50%;background:#fff}
 .topo .wrap{display:flex;align-items:center;gap:16px;min-height:56px}
 .topo .marca{font:800 1.15rem/1 var(--titulo);color:var(--girassol);text-decoration:none;margin-right:auto}
 .topo nav{display:flex;gap:18px}
@@ -36,8 +38,19 @@ a{color:var(--indigo)}
 @media (max-width:640px){.topo nav a.opc{display:none}}
 
 /* hero */
-.hero{background:var(--girassol);position:relative;overflow:hidden}
-.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;background:repeating-linear-gradient(90deg,var(--indigo) 0 18px,transparent 18px 30px)}
+/* aquarela da marca: manchas de girassol, aquarela, hibisco e índigo com bordas irregulares (filtro SVG) e grão de papel */
+.hero{background:var(--girassol);position:relative;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:-120px;z-index:-1;filter:url(#aquarela);
+  background:
+    radial-gradient(38% 46% at 70% 30%,rgba(174,212,243,.95) 0 55%,rgba(174,212,243,0) 72%),
+    radial-gradient(30% 40% at 90% 70%,rgba(113,32,186,.85) 0 50%,rgba(113,32,186,0) 74%),
+    radial-gradient(26% 30% at 98% 18%,rgba(42,11,168,.75) 0 45%,rgba(42,11,168,0) 72%),
+    radial-gradient(26% 34% at 58% 82%,rgba(113,32,186,.45) 0 40%,rgba(113,32,186,0) 70%),
+    radial-gradient(30% 30% at 76% 58%,rgba(174,212,243,.7) 0 40%,rgba(174,212,243,0) 70%),
+    radial-gradient(24% 26% at 6% 96%,rgba(174,212,243,.55) 0 40%,rgba(174,212,243,0) 70%);
+}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.35;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .5 0 0 0 0 .4 0 0 0 .45 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E")}
 .hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding:56px 0 72px}
 .hero .logo{width:min(230px,60%);filter:drop-shadow(0 8px 0 rgba(42,11,168,.12))}
 .hero h1{font:800 clamp(1.9rem,4.2vw,2.9rem)/1.08 var(--titulo);color:var(--indigo);margin:18px 0 10px;max-width:16ch}
@@ -63,6 +76,12 @@ a{color:var(--indigo)}
   @keyframes pendura{from{opacity:0;translate:0 -40px}}
 }
 @media (max-width:860px){
+  .hero::before{background:
+    radial-gradient(70% 22% at 30% 80%,rgba(174,212,243,.95) 0 55%,rgba(174,212,243,0) 75%),
+    radial-gradient(60% 20% at 90% 92%,rgba(113,32,186,.85) 0 50%,rgba(113,32,186,0) 75%),
+    radial-gradient(40% 14% at 100% 70%,rgba(42,11,168,.6) 0 40%,rgba(42,11,168,0) 72%),
+    radial-gradient(50% 16% at 0% 100%,rgba(113,32,186,.55) 0 40%,rgba(113,32,186,0) 72%),
+    radial-gradient(40% 10% at 95% 8%,rgba(174,212,243,.7) 0 40%,rgba(174,212,243,0) 72%)}
   .hero .wrap{grid-template-columns:1fr;padding:28px 0 48px}
   .hero .logo{width:min(170px,48%)}
   .varal{height:330px}
@@ -127,7 +146,7 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
 
 <header class="topo">
   <div class="wrap">
-    <a class="marca" href="#inicio">Artes Manuais</a>
+    <a class="marca" href="#inicio"><img src="img/favicon.png" alt="" width="36" height="36">Artes Manuais</a>
     <nav aria-label="Seções">
       <a href="#canecas">Canecas</a>
       <a href="#camisetas">Camisetas</a>
@@ -137,6 +156,13 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
   </div>
 </header>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="aquarela" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="4" seed="11" result="ruido"/>
+    <feDisplacementMap in="SourceGraphic" in2="ruido" scale="140" xChannelSelector="R" yChannelSelector="G"/>
+    <feGaussianBlur stdDeviation="2"/>
+  </filter>
+</svg>
 <main id="inicio">
   <div class="hero">
     <div class="wrap">
