@@ -18,3 +18,7 @@ O site é uma página estática (`index.html` + pasta `img/`), sem banco de dado
 - WhatsApp: (85) 9 8219-7478
 - Instagram: @artesmanuaisartesanais
 - Shopee: https://br.shp.ee/ntZ4soXP
+
+## Página "Monte seu pedido"
+
+`pedido.html` é o simulador de orçamento: o cliente escolhe as peças, vê o total e envia o pedido pronto no WhatsApp. Preços, estoque dos copos e a lista de peças ficam no começo do `<script>` (constantes `PRODUTOS` e `ENCOMENDA`). Ao cadastrar um produto novo no site, acrescente-o também ali.

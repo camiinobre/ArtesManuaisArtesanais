@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Monte seu pedido | Artes Manuais Artesanais</title>
+<meta name="description" content="Escolha canecas, copos e camisetas, veja o valor na hora e envie o pedido pelo WhatsApp.">
+<meta property="og:title" content="Monte seu pedido | Artes Manuais Artesanais">
+<meta property="og:description" content="Escolha as peças, veja o valor e mande o pedido pronto no WhatsApp.">
+<meta property="og:image" content="img/og.png">
+<link rel="icon" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Caveat:wght@600&family=Nunito:wght@400;600;800&display=swap">
+<style>
+/* Layout: bancada de peças à esquerda, comanda de papel fixa à direita (vira gaveta no celular) */
+:root{
+  --papel:#FBF5E8; --cartao:#FFFDF7; --tinta:#1D0A6E; --indigo:#2A0BA8; --girassol:#FCD71A;
+  --hibisco:#7120BA; --aquarela:#AED4F3; --linha:#E6DCC6; --suave:#5B5280; --ok:#1E7A4C;
+  --sombra:0 1px 0 rgba(29,10,110,.06),0 8px 24px -12px rgba(29,10,110,.25);
+  --f-tit:"Baloo 2",ui-rounded,"Arial Rounded MT Bold",system-ui,sans-serif;
+  --f-txt:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mao:"Caveat","Segoe Print","Bradley Hand",cursive;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --papel:#140A33; --cartao:#1E1247; --tinta:#F6EFE0; --indigo:#B9A8FF; --girassol:#FCD71A;
+  --hibisco:#D6A6FF; --aquarela:#2E3D73; --linha:#352763; --suave:#B7AED6; --ok:#6FD3A0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --papel:#140A33; --cartao:#1E1247; --tinta:#F6EFE0; --indigo:#B9A8FF; --girassol:#FCD71A;
+  --hibisco:#D6A6FF; --aquarela:#2E3D73; --linha:#352763; --suave:#B7AED6; --ok:#6FD3A0; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--papel);color:var(--tinta);font-family:var(--f-txt);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 120px}
+.wrap{max-width:1180px;margin:0 auto}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;padding-block:28px 18px;border-bottom:2px dashed var(--linha)}
+.marca{text-decoration:none;display:inline-block;font-family:var(--f-mao);font-size:22px;color:var(--hibisco);line-height:1}
+h1{font-family:var(--f-tit);font-weight:800;font-size:clamp(30px,5vw,46px);line-height:1.02;margin:4px 0 0;text-wrap:balance}
+h1 span{text-decoration:underline;text-decoration-color:var(--girassol);text-decoration-thickness:.16em;text-underline-offset:.1em}
+.sub{max-width:52ch;color:var(--suave);margin:6px 0 0}
+.selos{display:flex;flex-wrap:wrap;gap:8px}
+.selo{font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;border-radius:999px;border:1.5px solid var(--indigo);color:var(--indigo)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;align-items:start;padding-top:20px}
+.abas{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.aba{font:inherit;font-weight:800;padding:8px 14px;border-radius:10px;border:1.5px solid var(--linha);background:transparent;color:var(--tinta);cursor:pointer}
+.aba[aria-selected="true"]{background:var(--indigo);border-color:var(--indigo);color:var(--papel)}
+.aba:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--girassol);outline-offset:2px}
+.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:16px}
+.peca{background:var(--cartao);border:1px solid var(--linha);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.foto{aspect-ratio:4/5;max-width:100%;background:var(--aquarela);position:relative}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+.estoque{position:absolute;left:8px;top:8px;background:var(--girassol);color:#1D0A6E;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px}
+.corpo{padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.tipo{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--hibisco)}
+.nome{font-family:var(--f-tit);font-weight:600;font-size:16px;line-height:1.15;margin:0;text-wrap:balance}
+.linha-preco{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.preco{font-weight:800;font-variant-numeric:tabular-nums}
+.preco.combinar{font-family:var(--f-mao);font-size:20px;font-weight:600;color:var(--suave)}
+.opcoes{display:flex;gap:6px}
+.opcoes select,.campo select,.campo input,.campo textarea{font:inherit;font-size:14px;color:var(--tinta);background:var(--papel);border:1.5px solid var(--linha);border-radius:8px;padding:6px 8px;width:100%;min-width:0}
+.add{font:inherit;font-weight:800;border:0;border-radius:10px;padding:8px 12px;background:var(--girassol);color:#1D0A6E;cursor:pointer;white-space:nowrap}
+.add:hover{filter:brightness(.95)}
+.add:disabled{opacity:.45;cursor:not-allowed}
+.sob{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.sob .peca{padding:14px;gap:6px}
+.sob p{margin:0;color:var(--suave)}
+/* Comanda */
+.comanda{position:sticky;top:max(16px,env(safe-area-inset-top,0px));background:var(--cartao);border-radius:4px 4px 14px 14px;box-shadow:var(--sombra);border:1px solid var(--linha);
+  padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px}
+.comanda::before{content:"";position:absolute;left:0;right:0;top:-8px;height:8px;
+  background:radial-gradient(circle at 6px 8px,var(--cartao) 5px,transparent 5.5px) 0 0/12px 8px repeat-x}
+.cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:2px dashed var(--linha);padding-bottom:8px}
+.cab h2{font-family:var(--f-tit);font-size:22px;margin:0}
+.cab .num{font-family:var(--f-mao);font-size:20px;color:var(--hibisco)}
+.itens{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;max-height:38vh;overflow:auto}
+.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px}
+.item b{font-weight:800;font-size:14px;line-height:1.25}
+.item small{color:var(--suave);grid-column:1}
+.item .val{font-variant-numeric:tabular-nums;font-weight:800;text-align:right}
+.qtd{display:flex;align-items:center;gap:4px;grid-column:2;justify-self:end}
+.qtd button{width:26px;height:26px;border-radius:7px;border:1.5px solid var(--linha);background:transparent;color:var(--tinta);font-weight:800;cursor:pointer;line-height:1}
+.qtd button:disabled{opacity:.35;cursor:not-allowed}
+.qtd span{min-width:20px;text-align:center;font-variant-numeric:tabular-nums}
+.vazio{font-family:var(--f-mao);font-size:21px;color:var(--suave);text-align:center;padding:18px 6px;line-height:1.2}
+.campo{display:flex;flex-direction:column;gap:4px}
+.campo label,.legenda{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--suave)}
+.entregas{display:flex;flex-direction:column;gap:6px}
+.entregas label{display:flex;gap:8px;align-items:flex-start;font-size:14px;cursor:pointer}
+.entregas input{accent-color:var(--indigo);margin-top:3px}
+.total{border-top:2px dashed var(--linha);padding-top:10px;display:flex;flex-direction:column;gap:4px}
+.total .l{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+.total .grande{font-family:var(--f-tit);font-weight:800;font-size:26px}
+.prazo{font-family:var(--f-mao);font-size:20px;color:var(--hibisco);line-height:1.1}
+.enviar{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:800;font-size:16px;border-radius:12px;padding:12px;background:var(--indigo);color:var(--papel)}
+.enviar[aria-disabled="true"]{opacity:.4;pointer-events:none}
+.sec{font:inherit;font-weight:700;background:transparent;border:0;color:var(--indigo);text-decoration:underline;cursor:pointer;padding:2px}
+.rodape{font-size:13px;color:var(--suave);text-align:center}
+.rodape b{color:var(--tinta);user-select:all}
+.toast{font-size:13px;color:var(--ok);text-align:center;min-height:1em}
+.barra{display:none}
+@media (max-width:860px){
+  main{grid-template-columns:minmax(0,1fr)}
+  .comanda{position:static}
+  .barra{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:5;gap:12px;align-items:center;justify-content:space-between;
+    background:var(--indigo);color:var(--papel);padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+  .barra a{color:#1D0A6E;background:var(--girassol);text-decoration:none;font-weight:800;padding:8px 14px;border-radius:10px}
+}
+@media (prefers-reduced-motion:no-preference){.peca{transition:transform .15s}.peca:hover{transform:translateY(-2px)}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <a class="marca" href="./">← Artes Manuais · feito à mão</a>
+      <h1>Monte seu <span>pedido</span></h1>
+      <p class="sub">Escolha as peças, veja o valor na hora e mande o pedido pronto no nosso WhatsApp. A gente confirma o frete e o pagamento por lá.</p>
+    </div>
+    <div class="selos"><span class="selo">Fortaleza · CE</span><span class="selo">Produção em até 3 dias úteis</span></div>
+  </header>
+
+  <main>
+    <section aria-label="Peças">
+      <div class="abas" role="tablist">
+        <button class="aba" role="tab" id="aba-canecas" aria-selected="true" data-aba="canecas">Canecas e copos</button>
+        <button class="aba" role="tab" id="aba-camisetas" aria-selected="false" data-aba="camisetas">Camisetas</button>
+        <button class="aba" role="tab" id="aba-encomenda" aria-selected="false" data-aba="encomenda">Sob encomenda</button>
+      </div>
+      <div id="vitrine"></div>
+    </section>
+
+    <aside class="comanda" id="comanda" aria-label="Seu pedido">
+      <div class="cab"><h2>Seu pedido</h2><span class="num" id="contagem">0 peças</span></div>
+      <ul class="itens" id="itens"></ul>
+      <div class="campo"><label for="nome">Seu nome</label><input id="nome" placeholder="Como podemos te chamar?" autocomplete="name"></div>
+      <div class="campo"><span class="legenda">Como receber</span>
+        <div class="entregas" id="entregas">
+          <label><input type="radio" name="entrega" id="ent-retirada" value="Retirada combinada" checked> Retirar comigo (combinamos o local)</label>
+          <label><input type="radio" name="entrega" id="ent-fortaleza" value="Entrega em Fortaleza"> Entrega em Fortaleza</label>
+          <label><input type="radio" name="entrega" id="ent-envio" value="Envio pelos Correios"> Envio para outra cidade</label>
+        </div>
+      </div>
+      <div class="campo"><label for="obs">Observações</label><textarea id="obs" rows="2" placeholder="Data especial, presente, dúvida..."></textarea></div>
+      <div class="total">
+        <div class="l"><span>Peças</span><span id="subtotal">R$ 0,00</span></div>
+        <div class="l"><span>Frete</span><span id="frete">—</span></div>
+        <div class="l grande"><span>Total</span><span id="total">R$ 0,00</span></div>
+        <div class="prazo" id="prazo"></div>
+      </div>
+      <a class="enviar" id="enviar" href="#" target="_blank" rel="noopener" aria-disabled="true">Enviar pedido no WhatsApp</a>
+      <div style="text-align:center"><button class="sec" id="copiar" type="button">Copiar mensagem do pedido</button></div>
+      <div class="toast" id="toast" aria-live="polite"></div>
+      <div class="rodape">WhatsApp <b>(85) 9 8219-7478</b> · Instagram <b>@artesmanuaisartesanais</b></div>
+    </aside>
+  </main>
+</div>
+<div class="barra" id="barra"><span id="barra-txt">0 peças · R$ 0,00</span><a href="#comanda">Ver pedido</a></div>
+
+<script>
+const IMG = new Proxy({}, {get:(_,k)=>typeof k==="string"?`img/${k}-sm.webp`:undefined});
+const WHATS = "5585982197478";
+const PRAZO = "Pronto em até 3 dias úteis";
+const CORES_CAMISETA = ["Branca","Preta","Vermelha","Amarela"];
+const TAMANHOS = ["PP","P","M","G","GG"];
+const C = (id,tipo,nome,preco,extra={}) => ({id,tipo,nome,preco,...extra});
+const PRODUTOS = {
+  canecas:[
+    C("latina-demais","Caneca","Latina demais para ser minimalista",30),
+    C("coragem-de-desagradar","Caneca","Tenha a coragem de desagradar",30),
+    C("praticar-a-rebeldia","Caneca","Praticar a rebeldia de não ser perfeita",30),
+    C("rainha","Caneca","No meu tabuleiro, rainha",30),
+    C("tardezinha","Caneca","De tarde não, de tardezinha",30),
+    C("baralho","Caneca","No meu baralho não há rei maior que a dama",30),
+    C("deixa-digam","Caneca","Deixa digam, pensem, falem",30),
+    C("corazon-partio","Caneca","Tiritas pra esse corazón partío",30),
+    C("onca","Caneca","Calma, sou onça",30),
+    C("desobediencia","Caneca","Nunca reverência, sempre desobediência",30),
+    C("nao-vale-a-pena","Caneca","Não vale a pena trazer esse teu amor de volta",30),
+    C("jesus","Caneca","Sagrado Coração",30),
+    C("estrela-marrom","Caneca","Há de surgir uma estrela",30,{cores:["Marrom","Amarela"],fotoCor:{Marrom:"estrela-marrom",Amarela:"estrela-amarela"}}),
+    C("exu-na-defesa","Copo de vidro","Exu na defesa, eu mesma no ataque",20,{estoque:2,pronta:true}),
+    C("nao-me-comove","Copo americano","Não me comove o pranto de quem é ruim",12,{estoque:5,pronta:true}),
+  ],
+  camisetas:[
+    C("nordeste-preta","Camiseta","O Nordeste faz tudo",30,{camiseta:true,fotoCor:{Preta:"nordeste-preta",Branca:"nordeste-branca"}}),
+    C("bruxas","Camiseta","Bruxas não se curvam ao fascismo",30,{camiseta:true}),
+    C("estrela-que-brilha","Camiseta","A estrela que brilha",30,{camiseta:true}),
+  ],
+};
+const ENCOMENDA = [
+  {id:"sua-arte",nome:"Sua arte, sua frase",txt:"Mande a frase ou o desenho e a gente transforma na peça.",bases:[["Caneca",30],["Camiseta",30],["Copo americano",12]]},
+  {id:"imas",nome:"Ímãs de geladeira",txt:"Com arte da casa ou a sua foto, para lembrança, festa e brinde."},
+  {id:"adesivos",nome:"Adesivos e recortes",txt:"Adesivos e etiquetas recortados na medida, para embalagem ou lembrancinha."},
+  {id:"lula",nome:"Estampas Lula e Brasil 13",txt:"Lula Lá, Brasil 13 e outras artes em camiseta e caneca."},
+  {id:"ceramica",nome:"Cerâmica fria",txt:"Peças modeladas à mão, com edição especial de Natal."},
+];
+
+const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let aba = "canecas";
+let pedido = []; // {chave,nome,tipo,detalhe,preco,qtd,max,pronta,combinar}
+
+function addItem(it){
+  const ex = pedido.find(p=>p.chave===it.chave);
+  if(ex){ if(!ex.max || ex.qtd<ex.max) ex.qtd++; }
+  else pedido.push({...it,qtd:1});
+  render(); toast(`Adicionado ao pedido: ${it.tipo} “${it.nome}”`);
+}
+function qtdNoPedido(id){ return pedido.filter(p=>p.prodId===id).reduce((s,p)=>s+p.qtd,0); }
+
+function cardProduto(p){
+  const foto = IMG[p.id] ? `<img alt="${esc(p.tipo+' '+p.nome)}" src="${IMG[p.id]}" id="img-${p.id}">` : "";
+  const resta = p.estoque ? p.estoque - qtdNoPedido(p.id) : null;
+  const est = p.estoque ? `<span class="estoque">${resta>0?`Restam ${resta}`:"Esgotado"}</span>` : "";
+  let opts = "";
+  if(p.camiseta) opts = `<div class="opcoes"><select id="cor-${p.id}" aria-label="Cor">${CORES_CAMISETA.map(c=>`<option>${c}</option>`).join("")}</select><select id="tam-${p.id}" aria-label="Tamanho">${TAMANHOS.map(t=>`<option ${t==="M"?"selected":""}>${t}</option>`).join("")}</select></div>`;
+  if(p.cores) opts = `<div class="opcoes"><select id="cor-${p.id}" aria-label="Cor">${p.cores.map(c=>`<option>${c}</option>`).join("")}</select></div>`;
+  return `<article class="peca"><div class="foto">${foto}${est}</div><div class="corpo">
+    <span class="tipo">${esc(p.tipo)}${p.pronta?" · pronta entrega":""}</span>
+    <h3 class="nome">${esc(p.nome)}</h3>${opts}
+    <div class="linha-preco"><span class="preco">${brl(p.preco)}</span>
+    <button class="add" data-add="${p.id}" ${resta!==null&&resta<=0?"disabled":""}>Adicionar</button></div></div></article>`;
+}
+function cardEncomenda(e){
+  if(e.bases) return `<article class="peca"><span class="tipo">Personalizado</span><h3 class="nome">${e.nome}</h3><p>${e.txt}</p>
+    <div class="campo"><label for="base-sua-arte">Peça</label><select id="base-sua-arte">${e.bases.map(([n,v])=>`<option value="${n}">${n} · ${brl(v)}</option>`).join("")}</select></div>
+    <div class="campo"><label for="frase-sua-arte">Sua frase ou ideia</label><textarea id="frase-sua-arte" rows="2" placeholder="Ex.: o nome da minha avó com flores de ipê"></textarea></div>
+    <div class="linha-preco"><span class="preco" id="preco-sua-arte">${brl(e.bases[0][1])}</span><button class="add" data-enc="sua-arte">Adicionar</button></div></article>`;
+  return `<article class="peca"><span class="tipo">Sob encomenda</span><h3 class="nome">${e.nome}</h3><p>${e.txt}</p>
+    <div class="linha-preco"><span class="preco combinar">valor a combinar</span><button class="add" data-enc="${e.id}">Pedir orçamento</button></div></article>`;
+}
+function renderVitrine(){
+  const v = $("#vitrine");
+  v.innerHTML = aba==="encomenda"
+    ? `<div class="grade sob">${ENCOMENDA.map(cardEncomenda).join("")}</div>`
+    : `<div class="grade">${PRODUTOS[aba].map(cardProduto).join("")}</div>`;
+  document.querySelectorAll(".aba").forEach(b=>b.setAttribute("aria-selected",b.dataset.aba===aba));
+}
+
+function render(){
+  // preserva campos da vitrine ao re-renderizar
+  const keep = {}; document.querySelectorAll("#vitrine select,#vitrine textarea").forEach(e=>keep[e.id]=e.value);
+  renderVitrine();
+  Object.entries(keep).forEach(([id,val])=>{const e=document.getElementById(id); if(e){e.value=val; e.dispatchEvent(new Event("change"));}});
+  const ul = $("#itens");
+  if(!pedido.length) ul.innerHTML = `<li class="vazio">Nenhuma peça ainda.<br>Toque em “Adicionar” numa peça ao lado.</li>`;
+  else ul.innerHTML = pedido.map((p,i)=>`<li class="item"><b>${esc(p.tipo)} “${esc(p.nome)}”</b>
+    <span class="val">${p.combinar?"a combinar":brl(p.preco*p.qtd)}</span>
+    <small>${esc(p.detalhe||"")}</small>
+    <div class="qtd"><button aria-label="Menos uma" data-menos="${i}">−</button><span>${p.qtd}</span><button aria-label="Mais uma" data-mais="${i}" ${p.max&&p.qtd>=p.max?"disabled":""}>+</button></div></li>`).join("");
+  const n = pedido.reduce((s,p)=>s+p.qtd,0);
+  const sub = pedido.filter(p=>!p.combinar).reduce((s,p)=>s+p.preco*p.qtd,0);
+  const temCombinar = pedido.some(p=>p.combinar);
+  const ent = document.querySelector('input[name="entrega"]:checked').value;
+  $("#contagem").textContent = `${n} ${n===1?"peça":"peças"}`;
+  $("#subtotal").textContent = brl(sub);
+  $("#frete").textContent = ent==="Retirada combinada" ? "sem frete" : "a combinar";
+  $("#total").textContent = brl(sub) + (temCombinar||ent!=="Retirada combinada" ? " +" : "");
+  const soPronta = pedido.length && pedido.every(p=>p.pronta);
+  $("#prazo").textContent = !pedido.length ? "" : soPronta ? "Pronta entrega" : PRAZO + " após a confirmação";
+  $("#barra-txt").textContent = `${n} ${n===1?"peça":"peças"} · ${brl(sub)}`;
+  atualizaLink();
+}
+function atualizaLink(){
+  const n = pedido.reduce((s,p)=>s+p.qtd,0);
+  const a = $("#enviar");
+  if(n){ a.href = `https://wa.me/${WHATS}?text=${encodeURIComponent(mensagem())}`; a.setAttribute("aria-disabled","false"); }
+  else { a.href="#"; a.setAttribute("aria-disabled","true"); }
+}
+function mensagem(){
+  const nome = $("#nome").value.trim(), obs = $("#obs").value.trim();
+  const ent = document.querySelector('input[name="entrega"]:checked').value;
+  const sub = pedido.filter(p=>!p.combinar).reduce((s,p)=>s+p.preco*p.qtd,0);
+  const linhas = pedido.map(p=>`• ${p.qtd}× ${p.tipo} "${p.nome}"${p.detalhe?` (${p.detalhe})`:""} — ${p.combinar?"orçamento":brl(p.preco*p.qtd)}`);
+  return [`Olá! Montei um pedido pela Artes Manuais:`,"",...linhas,"",`Valor das peças: ${brl(sub)}`,`Receber: ${ent}${ent==="Retirada combinada"?"":" (frete a combinar)"}`,
+    nome?`Nome: ${nome}`:null, obs?`Observações: ${obs}`:null].filter(l=>l!==null).join("\n").trim();
+}
+let tt; function toast(t){ const e=$("#toast"); e.textContent=t; clearTimeout(tt); tt=setTimeout(()=>e.textContent="",2200); }
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button,a"); if(!t) return;
+  if(t.dataset.aba){ aba=t.dataset.aba; render(); }
+  if(t.dataset.add){
+    const p=[...PRODUTOS.canecas,...PRODUTOS.camisetas].find(x=>x.id===t.dataset.add);
+    let detalhe="", chave=p.id;
+    if(p.camiseta){ const cor=$("#cor-"+p.id).value, tam=$("#tam-"+p.id).value; detalhe=`${cor}, ${tam}`; chave+=`|${cor}|${tam}`; }
+    if(p.cores){ const cor=$("#cor-"+p.id).value; detalhe=cor; chave+="|"+cor; }
+    const max = p.estoque ? p.estoque - qtdNoPedido(p.id) + (pedido.find(x=>x.chave===chave)?.qtd||0) : 0;
+    addItem({chave,prodId:p.id,nome:p.nome,tipo:p.tipo,detalhe,preco:p.preco,max:p.estoque?max:0,pronta:!!p.pronta});
+  }
+  if(t.dataset.enc){
+    const en=ENCOMENDA.find(x=>x.id===t.dataset.enc);
+    if(en.bases){
+      const base=$("#base-sua-arte").value, frase=$("#frase-sua-arte").value.trim();
+      if(!frase){ toast("Escreva a frase ou ideia para a peça"); $("#frase-sua-arte").focus(); return; }
+      const preco=en.bases.find(b=>b[0]===base)[1];
+      addItem({chave:"sua|"+base+"|"+frase,prodId:"sua",nome:frase,tipo:base,detalhe:"arte personalizada",preco});
+    } else addItem({chave:en.id,prodId:en.id,nome:en.nome,tipo:"Encomenda",detalhe:"valor a combinar",preco:0,combinar:true});
+  }
+  if(t.dataset.menos!==undefined){ const i=+t.dataset.menos; pedido[i].qtd--; if(!pedido[i].qtd) pedido.splice(i,1); render(); }
+  if(t.dataset.mais!==undefined){ const i=+t.dataset.mais; const p=pedido[i]; const total=p.max?qtdNoPedido(p.prodId):0;
+    const prod=[...PRODUTOS.canecas].find(x=>x.id===p.prodId); if(!prod?.estoque || total<prod.estoque){p.qtd++;} render(); }
+  if(t.id==="copiar"){
+    if(!pedido.length){ toast("Adicione uma peça primeiro"); return; }
+    const txt=mensagem();
+    navigator.clipboard?.writeText(txt).then(()=>toast("Mensagem copiada. Cole no WhatsApp (85) 9 8219-7478."))
+      .catch(()=>{ const ta=document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select(); toast("Selecionei o texto: use Ctrl+C para copiar"); setTimeout(()=>ta.remove(),4000); });
+  }
+});
+document.addEventListener("change",e=>{
+  const id=e.target.id||"";
+  if(id.startsWith("cor-")){ const pid=id.slice(4); const p=[...PRODUTOS.canecas,...PRODUTOS.camisetas].find(x=>x.id===pid);
+    const f=p?.fotoCor?.[e.target.value]; const img=document.getElementById("img-"+pid); if(f&&img&&IMG[f]) img.src=IMG[f]; }
+  if(id==="base-sua-arte"){ const b=ENCOMENDA[0].bases.find(x=>x[0]===e.target.value); $("#preco-sua-arte").textContent=brl(b[1]); }
+  if(e.target.name==="entrega") render();
+});
+document.addEventListener("input",e=>{ if(e.target.id==="nome"||e.target.id==="obs") atualizaLink(); });
+render();
+</script>
+
+</body>
+</html>
