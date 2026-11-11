@@ -107,6 +107,12 @@ h2{font:800 clamp(1.7rem,3.4vw,2.4rem)/1.1 var(--titulo);color:var(--indigo);mar
 
 .camisetas{background:var(--aquarela)}
 .camisetas .produto img{border-radius:14px}
+.medidas{margin-top:56px;max-width:560px}
+.medidas h3{font:800 1.5rem/1.2 var(--titulo);color:var(--indigo);margin:0 0 6px}
+.medidas p{margin:0 0 14px}
+.medidas .ampliar{all:unset;cursor:zoom-in;display:block;width:100%}
+.medidas .ampliar:focus-visible{outline:3px solid var(--hibisco);outline-offset:4px}
+.medidas img{width:100%;height:auto;border-radius:14px}
 
 /* encomenda */
 .encomenda .lista{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:18px;margin:0;padding:0;list-style:none}
@@ -199,8 +205,15 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
   <section id="camisetas" class="camisetas">
     <div class="wrap">
       <h2>Camisetas</h2>
-      <p class="intro">Estampas em DTF, com arte desenhada à mão. Tamanhos e cores sob consulta.</p>
+      <p class="intro">Estampas em DTF, com arte desenhada à mão. Tamanhos de PP a GG (veja a <a href="#medidas">tabela de medidas</a>); cores sob consulta.</p>
       <ul class="grade" id="grade-camisetas"></ul>
+      <div class="medidas" id="medidas">
+        <h3>Tabela de medidas</h3>
+        <p>Camiseta tradicional premium, unissex, 100% algodão. Toque na imagem para ver maior.</p>
+        <button type="button" class="ampliar" data-img="img/tabela-medidas.webp" data-nome="Tabela de medidas" aria-label="Ampliar tabela de medidas">
+          <img src="img/tabela-medidas-sm.webp" width="600" height="600" loading="lazy" alt="Tabela de medidas da camiseta, altura do ombro à barra por largura de lateral a lateral: PP 63 por 44 cm, P 70 por 49 cm, M 71 por 51 cm, G 75 por 55 cm, GG 77 por 58 cm. Pode haver diferença de até 1,5 cm.">
+        </button>
+      </div>
     </div>
   </section>
 
@@ -294,7 +307,7 @@ document.querySelectorAll('[data-wpp]').forEach(a => { a.href = linkWpp(a.datase
 
 const dlg = document.getElementById('zoom');
 document.addEventListener('click', e => {
-  const b = e.target.closest('.produto button');
+  const b = e.target.closest('.produto button, .ampliar');
   if (b) { dlg.querySelector('img').src = b.dataset.img; dlg.querySelector('img').alt = b.dataset.nome; dlg.querySelector('p').textContent = b.dataset.nome; dlg.showModal(); }
 });
 dlg.querySelector('.fechar').onclick = () => dlg.close();
