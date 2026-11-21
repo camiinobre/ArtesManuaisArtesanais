@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Calculadora de preços AMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Caveat:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Sol & Hibisco. Girassol no topo, índigo como voz, papel creme como mesa.
+     Uma coluna no celular; um cartão por produto com três linhas de canal. */
+  --indigo:#2A0BA8; --girassol:#FCD71A; --hibisco:#7120BA; --aquarela:#AED4F3; --creme:#FBF5E8;
+  --papel:#FFFDF8; --tinta:#1F1640; --tinta-2:#5B5480; --linha:#E2D9F2;
+  --bom:#17703F; --bom-bg:#DBF2E3; --alerta:#7A4E00; --alerta-bg:#FFEDB8; --ruim:#A8231B; --ruim-bg:#FADDD9;
+  --display:"Baloo 2","Trebuchet MS",sans-serif;
+  --corpo:"Nunito","Segoe UI",system-ui,sans-serif;
+  --mao:"Caveat","Comic Sans MS",cursive;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--creme);color:var(--tinta);font:400 16px/1.45 var(--corpo)}
+h1,h2,h3{font-family:var(--display);color:var(--indigo);margin:0;text-wrap:balance;line-height:1.1}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--hibisco);outline-offset:2px}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+
+.topo{background:var(--girassol);padding:18px 0 14px}
+.topo h1{font-size:1.7rem;font-weight:800}
+.topo .mao{font:700 1.35rem/1 var(--mao);color:var(--hibisco);margin-top:2px}
+.topo .conf{font-size:.82rem;color:var(--indigo);margin-top:8px;font-weight:700}
+
+nav{position:sticky;top:0;z-index:5;background:var(--indigo)}
+nav .wrap{display:flex;gap:4px;padding-top:6px;padding-bottom:6px}
+nav a{flex:1;text-align:center;padding:9px 6px;border-radius:10px;color:#fff;text-decoration:none;font-weight:800;font-size:.95rem}
+nav a[aria-current="page"]{background:var(--girassol);color:var(--indigo)}
+
+main{padding:16px 0 40px}
+section.view{display:none;flex-direction:column;gap:14px}
+section.view.on{display:flex}
+
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--papel);border:1px solid var(--linha);border-radius:14px;padding:10px 12px}
+.meta label{display:flex;flex-direction:row;align-items:center;gap:8px;font-weight:800;color:var(--indigo);font-size:1rem;white-space:nowrap}
+.meta input{width:64px}
+.meta .dica{font-size:.85rem;color:var(--tinta-2);flex:1 1 200px}
+
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{background:var(--papel);border:1px solid var(--linha);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.tile .regra{font-size:.78rem;color:var(--tinta-2);line-height:1.25}
+.tile .conta{font-weight:800;font-size:.9rem;font-variant-numeric:tabular-nums}
+.tile .conta.ruim{color:var(--ruim)} .tile .conta.bom{color:var(--bom)} .tile .conta.alerta{color:var(--alerta)}
+
+.tag{display:inline-block;font-weight:800;font-size:.78rem;padding:2px 9px;border-radius:999px;white-space:nowrap;align-self:flex-start}
+.tag.feira{background:var(--girassol);color:var(--indigo)}
+.tag.nuvem{background:var(--aquarela);color:var(--indigo)}
+.tag.shopee{background:var(--hibisco);color:#fff}
+
+input,select{background:#fff;border:1.5px solid var(--linha);border-radius:10px;padding:8px 10px;min-height:42px;width:100%;font-variant-numeric:tabular-nums}
+input:hover,select:hover{border-color:var(--aquarela)}
+button{cursor:pointer;border:0;border-radius:10px;min-height:42px;padding:8px 14px;font-weight:800}
+.btn{background:var(--indigo);color:#fff}
+.btn.claro{background:#fff;color:var(--indigo);border:1.5px solid var(--indigo)}
+.btn.perigo{background:#fff;color:var(--ruim);border:1.5px solid var(--ruim)}
+
+.prod{background:var(--papel);border:1px solid var(--linha);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.prod header{display:flex;gap:8px;align-items:center}
+.prod .nome{font:800 1.15rem/1.2 var(--display);color:var(--indigo);border-color:transparent;background:transparent;padding:4px 6px;min-height:36px}
+.prod .nome:hover,.prod .nome:focus{border-color:var(--linha);background:#fff}
+.prod .del{background:transparent;color:var(--tinta-2);min-height:36px;padding:4px 10px;font-size:.85rem;white-space:nowrap}
+.prod .del.certeza{background:var(--ruim-bg);color:var(--ruim)}
+.custo{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;padding:0 6px}
+.custo strong{font-size:1.1rem;font-variant-numeric:tabular-nums}
+.custo .quebra{font-size:.82rem;color:var(--tinta-2)}
+.chip{font-size:.75rem;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--alerta-bg);color:var(--alerta)}
+details{border:1px dashed var(--linha);border-radius:12px;padding:6px 10px}
+summary{cursor:pointer;font-weight:800;color:var(--hibisco);padding:4px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;padding:8px 0}
+label{display:flex;flex-direction:column;gap:3px;font-size:.85rem;font-weight:700;color:var(--tinta-2)}
+label small{font-weight:400;line-height:1.25}
+.par{display:flex;gap:6px;align-items:center}
+.par span{color:var(--tinta-2)}
+.nota{font-size:.82rem;color:var(--tinta-2);padding-bottom:4px}
+
+.canal{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;border-top:1px solid var(--linha);padding-top:10px}
+.canal>input{width:72px;flex:0 0 72px;padding:8px 6px;text-align:center}
+.canal .tag{align-self:center}
+.canal .pill{margin-left:auto;white-space:nowrap;font-weight:800;font-size:.85rem;padding:5px 9px;border-radius:10px;background:#EFEAF8;color:var(--tinta-2);text-align:right;font-variant-numeric:tabular-nums}
+.pill.bom{background:var(--bom-bg);color:var(--bom)} .pill.alerta{background:var(--alerta-bg);color:var(--alerta)} .pill.ruim{background:var(--ruim-bg);color:var(--ruim)}
+.canal .det{flex:1 1 140px;min-width:0;font-size:.8rem;color:var(--tinta-2);font-variant-numeric:tabular-nums}
+.canal .sug{flex:0 0 auto;white-space:nowrap;margin-left:auto;background:#fff;border:1.5px solid var(--indigo);color:var(--indigo);min-height:34px;padding:3px 10px;font-size:.82rem}
+.canal .sug[disabled]{border-color:var(--linha);color:var(--tinta-2);cursor:default}
+.combo{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;border-top:1px solid var(--linha);padding-top:10px;font-size:.85rem;font-weight:700;color:var(--tinta-2)}
+.combo input{width:64px} .combo .pill{font-weight:800;font-size:.85rem;padding:5px 10px;border-radius:10px;background:#EFEAF8}
+
+.acoes{display:flex;flex-wrap:wrap;gap:8px}
+.bloco{background:var(--papel);border:1px solid var(--linha);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.bloco h2{font-size:1.2rem}
+.bloco .sub{font-size:.85rem;color:var(--tinta-2)}
+.saida{font-weight:800;color:var(--indigo);font-size:.9rem}
+.aviso{background:var(--alerta-bg);color:var(--alerta);border-radius:10px;padding:8px 10px;font-size:.85rem;font-weight:700}
+.fontes{font-size:.85rem;color:var(--tinta-2);display:flex;flex-direction:column;gap:6px;padding-left:18px;margin:0}
+.fontes a{color:var(--indigo);font-weight:700}
+.rap{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;border-top:1px solid var(--linha);padding-top:10px}
+.rap .linha{grid-column:1/-1;font-size:.9rem;font-variant-numeric:tabular-nums}
+.rap b{color:var(--indigo)}
+footer{background:var(--indigo);color:#fff;padding:14px 0;font-size:.82rem}
+footer b{color:var(--girassol)}
+@media (max-width:460px){
+  .tiles{grid-template-columns:1fr}
+  .tile{flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px 10px}
+  .tile .regra{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+<div class="topo"><div class="wrap">
+  <h1>Calculadora de preços</h1>
+  <p class="mao">quanto cobrar na feira, na Nuvemshop e na Shopee</p>
+  <p class="conf">Taxas conferidas em 20/11/2026. Todas podem ser editadas na aba Taxas.</p>
+</div></div>
+<nav aria-label="Seções"><div class="wrap">
+  <a href="#produtos" data-v="produtos">Produtos</a>
+  <a href="#conta" data-v="conta">Conta rápida</a>
+  <a href="#taxas" data-v="taxas">Taxas e custos</a>
+</div></nav>
+
+<main class="wrap">
+<section class="view" id="view-produtos">
+  <div class="meta">
+    <label for="meta-margem">Meta de margem <input id="meta-margem" data-cfg="margem" inputmode="decimal"> %</label>
+    <p class="dica">Margem é o lucro dividido pelo preço. O botão de meta em cada linha preenche o menor preço que atinge essa margem.</p>
+  </div>
+  <div class="tiles" id="tiles"></div>
+  <div id="lista" style="display:flex;flex-direction:column;gap:14px"></div>
+  <div class="acoes">
+    <button class="btn" id="add" type="button">Adicionar produto</button>
+    <button class="btn claro" id="copiar" type="button">Copiar tabela de preços</button>
+  </div>
+  <p class="nota" id="copiar-msg" role="status"></p>
+</section>
+
+<section class="view" id="view-conta">
+  <div class="bloco">
+    <h2>Conta rápida</h2>
+    <p class="sub">Para uma peça fora da lista ou para responder a um pedido de desconto na hora.</p>
+    <div class="grid">
+      <label for="r-custo">Custo total da peça (R$)<input id="r-custo" data-r="custo" inputmode="decimal"></label>
+      <label for="r-preco">Preço que quer testar (R$)<input id="r-preco" data-r="preco" inputmode="decimal"></label>
+    </div>
+    <div id="rapida"></div>
+  </div>
+</section>
+
+<section class="view" id="view-taxas">
+  <div id="cfg"></div>
+  <div class="bloco">
+    <h2>De onde vêm os números</h2>
+    <ul class="fontes">
+      <li>DTF têxtil a R$ 38,00 por metro, rolo de 58 cm: OS 1172 da PhD Sublimação, 17/11/2026.</li>
+      <li>Camisas coloridas a R$ 18,90 (até G) e R$ 21,00 (GG) e botton acrílico 45 mm a R$ 1,49: pedido 75677 da DNP, 17/11/2026.</li>
+      <li>Camisas brancas a R$ 17,50 (Suador) e R$ 14,50 (Tradicional cardada): pedido Zé Camisas de 28/10/2026, sem o frete.</li>
+      <li>Shopee: 20% + R$ 4,50 por item até R$ 79,99 e 14% + R$ 16, R$ 20 ou R$ 26 acima disso, em vigor desde 01/10/2026. Vem de fontes secundárias que citam a Central do Vendedor (<a href="https://centraldovarejo.com.br/como-vender-na-shopee-em-2026-e-quanto-custa-por-venda/">Central do Varejo</a>, <a href="https://nacao.digital/blog/taxas-da-shopee/">Nação Digital</a>). Confira em Central do Vendedor, Política de comissão.</li>
+      <li>Shopee, item barato: a taxa fixa vira metade do preço. As fontes divergem sobre o limite (R$ 8 ou R$ 9). A calculadora usa o menor valor entre a taxa fixa e metade do preço.</li>
+      <li>Nuvemshop: taxa de cartão por plano e Pix a 0,99% estão na <a href="https://www.nuvemshop.com.br/planos-e-precos">página oficial de planos</a>. Os R$ 0,35 por transação no cartão e os prazos de 14 e 2 dias vêm de <a href="https://milewa.com.br/blog/nuvemshop-como-funciona">fonte secundária</a> (conferida em 20/10/2026). Boleto a R$ 2,39 tem uma fonte secundária só.</li>
+      <li>Nuvemshop, plano Começo com outro meio de pagamento: a página oficial mostra 0% num trecho e 2% em outro. A calculadora usa 2%.</li>
+      <li>Não entram na conta: mensalidade da Nuvemshop, parcelamento no cartão, anúncios e cupons da Shopee (há um campo de % extra para isso).</li>
+    </ul>
+  </div>
+  <div class="acoes"><button class="btn perigo" id="reset" type="button">Restaurar valores originais</button></div>
+</section>
+</main>
+<footer><div class="wrap">Artes Manuais Artesanais · o que você altera fica salvo <b>neste aparelho</b>.</div></footer>
+
+<script>
+/*CORE*/
+function num(s){
+  if (s==null) return 0;
+  let t=String(s).trim().replace(/\s|R\$/g,'');
+  if (t.indexOf(',')>=0) t=t.replace(/\./g,'').replace(',','.');
+  const n=parseFloat(t);
+  return isFinite(n)?n:0;
+}
+const NUVEM={
+  comeco:{nome:'Começo',c30:4.69,c14:5.19,c2:5.69,outro:2},
+  essencial:{nome:'Essencial',c30:4.19,c14:4.69,c2:5.19,outro:2},
+  impulso:{nome:'Impulso',c30:3.69,c14:4.19,c2:4.69,outro:1},
+  escala:{nome:'Escala',c30:3.29,c14:3.69,c2:3.99,outro:0.7}
+};
+const MEIOS={pix:'Pix',c30:'Cartão, recebe em 30 dias',c14:'Cartão, recebe em 14 dias',c2:'Cartão, recebe em 2 dias',boleto:'Boleto',outro:'Outro meio de pagamento'};
+function taxaNuvem(plano,meio){
+  const p=NUVEM[plano]||NUVEM.comeco;
+  if (meio==='pix') return {pct:0.99,fixa:0};
+  if (meio==='boleto') return {pct:0,fixa:2.39};
+  if (meio==='outro') return {pct:p.outro,fixa:0};
+  return {pct:p[meio],fixa:0.35};
+}
+/* converte a configuração (textos) em números */
+function numeros(c){
+  const fat=num(c.feira.fat), fixo=num(c.feira.fixo);
+  return {
+    margem:num(c.margem)/100, valorHora:num(c.valorHora), outros:num(c.outrosPct)/100, embEnvio:num(c.embEnvio),
+    dtfPrecoM:num(c.dtfPrecoM), dtfLarg:num(c.dtfLarg), dtfAprov:num(c.dtfAprov),
+    feira:{taxa:num(c.feira.taxa)/100, rateio:(fat>0?fixo/fat:0), arred:c.feira.arred},
+    nuvem:{pct:num(c.nuvem.pct)/100, fixa:num(c.nuvem.fixa), freteCobrado:num(c.nuvem.freteCobrado), freteAbs:num(c.nuvem.freteAbs), arred:c.nuvem.arred},
+    shopee:{c1:num(c.shopee.c1)/100,f1:num(c.shopee.f1),c2:num(c.shopee.c2)/100,f2:num(c.shopee.f2),f3:num(c.shopee.f3),f4:num(c.shopee.f4),
+      l2:num(c.shopee.l2),l3:num(c.shopee.l3),l4:num(c.shopee.l4),meia:!!c.shopee.meia,cpf:(c.shopee.cpf?num(c.shopee.cpfExtra):0),extra:num(c.shopee.extra)/100,arred:c.shopee.arred}
+  };
+}
+function dtfPorCm2(g){
+  const larg=g.dtfLarg>0?g.dtfLarg:58, ap=g.dtfAprov>0?g.dtfAprov:100;
+  return g.dtfPrecoM/(larg*100)/(ap/100);
+}
+function custoPeca(p,g){
+  const base=num(p.base), area=num(p.w1)*num(p.h1)+num(p.w2)*num(p.h2);
+  const dtf=area*dtfPorCm2(g), outros=num(p.outros), emb=num(p.emb), mo=num(p.min)/60*g.valorHora;
+  return {completo:String(p.base==null?'':p.base).trim()!=='', base,dtf,outros,emb,mo,total:base+dtf+outros+emb+mo};
+}
+function taxaShopee(preco,s){
+  let c,f;
+  if (preco<s.l2){c=s.c1; f=s.meia?Math.min(s.f1,preco/2):s.f1;}
+  else if (preco<s.l3){c=s.c2;f=s.f2;}
+  else if (preco<s.l4){c=s.c2;f=s.f3;}
+  else {c=s.c2;f=s.f4;}
+  return preco*(c+s.extra)+f+s.cpf;
+}
+/* resultado de uma venda de valor `preco` com custo de produto C */
+function calc(canal,preco,C,g){
+  let taxas=0, extras=0;
+  if (canal==='feira') taxas=preco*(g.feira.taxa+g.feira.rateio+g.outros);
+  else if (canal==='nuvem'){taxas=g.nuvem.pct*(preco+g.nuvem.freteCobrado)+g.nuvem.fixa+preco*g.outros; extras=g.nuvem.freteAbs+g.embEnvio;}
+  else {taxas=taxaShopee(preco,g.shopee)+preco*g.outros; extras=g.embEnvio;}
+  const lucro=preco-taxas-extras-C;
+  return {taxas,extras,recebe:preco-taxas-extras,lucro,margem:preco>0?lucro/preco:0};
+}
+function arredonda(p,modo){
+  const e=1e-9;
+  if (modo==='int') return Math.ceil(p-e);
+  if (modo==='meio') return Math.ceil(p*2-e)/2;
+  if (modo==='90') return Math.ceil(p-0.9-e)+0.9;
+  return Math.ceil(p*100-e)/100;
+}
+/* menor preço (antes de arredondar) com margem m; null se não existe */
+function analitico(canal,C,g,m){
+  if (canal==='feira'){const d=1-g.feira.taxa-g.feira.rateio-g.outros-m; return d>0?C/d:null;}
+  if (canal==='nuvem'){const n=g.nuvem, d=1-n.pct-g.outros-m; return d>0?(C+n.freteAbs+g.embEnvio+n.fixa+n.pct*n.freteCobrado)/d:null;}
+  const s=g.shopee, Cx=C+g.embEnvio+s.cpf, o=g.outros+s.extra+m, cand=[];
+  if (s.meia){const d=0.5-s.c1-o; if (d>0){const p=Cx/d; if (p<2*s.f1 && p<s.l2) cand.push(p);}}
+  const faixas=[[s.c1,s.f1,s.meia?Math.min(2*s.f1,s.l2):0.01,s.l2],[s.c2,s.f2,s.l2,s.l3],[s.c2,s.f3,s.l3,s.l4],[s.c2,s.f4,s.l4,Infinity]];
+  for (const [c,f,lo,hi] of faixas){const d=1-c-o; if (d>0){const p=Math.max((Cx+f)/d,lo); if (p<hi) cand.push(p);}}
+  return cand.length?Math.min.apply(null,cand):null;
+}
+function precoMin(canal,C,g,m,modo){
+  const p0=analitico(canal,C,g,m);
+  if (p0==null||!isFinite(p0)||p0<=0) return null;
+  const passo=modo==='int'||modo==='90'?1:(modo==='meio'?0.5:0.01);
+  let p=arredonda(p0,modo), i=0;
+  while (calc(canal,p,C,g).lucro < m*p-1e-7 && i<6000){p=Math.round((p+passo)*100)/100; i++;}
+  return i>=6000?null:p;
+}
+/*FIMCORE*/
+
+const CANAIS=[['feira','Feira','pFeira'],['nuvem','Nuvemshop','pNuvem'],['shopee','Shopee','pShopee']];
+const NOTA_EST='A estampa indicada é um exemplo (frente over). Ajuste largura e altura à arte.';
+const PADRAO={
+  v:1,
+  cfg:{
+    margem:'30', valorHora:'', outrosPct:'', embEnvio:'',
+    dtfPrecoM:'38,00', dtfLarg:'58', dtfAprov:'85',
+    feira:{taxa:'0', fixo:'', fat:'', arred:'int'},
+    nuvem:{plano:'comeco', meio:'pix', pct:'0,99', fixa:'0', freteCobrado:'', freteAbs:'', arred:'90'},
+    shopee:{c1:'20', f1:'4,50', c2:'14', f2:'16', f3:'20', f4:'26', l2:'80', l3:'100', l4:'200', meia:true, cpf:false, cpfExtra:'3', extra:'', arred:'90'}
+  },
+  produtos:[
+    {id:'cam-cor',nome:'Camiseta colorida P ao G',base:'18,90',w1:'31',h1:'35',w2:'6',h2:'3',pFeira:'30',pNuvem:'30',pShopee:'30',nota:'Camisa a R$ 18,90 no pedido DNP de 17/11. '+NOTA_EST+' Etiqueta de 6 × 3 cm.'},
+    {id:'cam-cor-gg',nome:'Camiseta colorida GG',base:'21,00',w1:'35',h1:'40',w2:'7',h2:'3,5',pFeira:'30',pNuvem:'30',pShopee:'30',nota:'Camisa a R$ 21,00 no pedido DNP de 17/11. '+NOTA_EST+' Etiqueta de 7 × 3,5 cm.'},
+    {id:'cam-br-su',nome:'Camiseta branca Suador',base:'17,50',w1:'31',h1:'35',w2:'6',h2:'3',pFeira:'30',pNuvem:'30',pShopee:'30',nota:'Camisa a R$ 17,50 no pedido Zé Camisas de 28/10, sem o frete. '+NOTA_EST},
+    {id:'cam-br-tr',nome:'Camiseta branca Tradicional',base:'14,50',w1:'31',h1:'35',w2:'6',h2:'3',pFeira:'30',pNuvem:'30',pShopee:'30',nota:'Camisa a R$ 14,50 no pedido Zé Camisas de 28/10, sem o frete. '+NOTA_EST},
+    {id:'botton',nome:'Botton acrílico 45 mm',base:'1,49',pFeira:'5',pNuvem:'5',pShopee:'5',cq:'4',cp:'15',nota:'Botton a R$ 1,49 no pedido DNP de 17/11. Falta somar a impressão do miolo em Outros insumos.'},
+    {id:'caneca',nome:'Caneca de cerâmica',base:'',pFeira:'30',pNuvem:'30',pShopee:'30',nota:'Falta o custo da caneca e do DTF UV. Preencha em Item base e Outros insumos.'},
+    {id:'copo-vidro',nome:'Copo de vidro',base:'',pFeira:'20',pNuvem:'20',pShopee:'20',nota:'Falta o custo do copo e do DTF UV.'},
+    {id:'copo-am',nome:'Copo americano',base:'',pFeira:'12',pNuvem:'12',pShopee:'12',nota:'Falta o custo do copo e do DTF UV.'},
+    {id:'enfeite',nome:'Enfeite de Natal de cerâmica fria',base:'',nota:'Falta o custo de material e o preço.'}
+  ],
+  rapida:{custo:'',preco:''}
+};
+const CHAVE='ama-precos-v1';
+let S=carregar();
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function carregar(){
+  try{
+    const t=localStorage.getItem(CHAVE);
+    if (t){const o=JSON.parse(t); if (o&&o.v===1&&o.cfg&&Array.isArray(o.produtos)){
+      const d=clone(PADRAO);
+      o.cfg=Object.assign(d.cfg,o.cfg,{feira:Object.assign(d.cfg.feira,o.cfg.feira),nuvem:Object.assign(d.cfg.nuvem,o.cfg.nuvem),shopee:Object.assign(d.cfg.shopee,o.cfg.shopee)});
+      o.rapida=o.rapida||{custo:'',preco:''}; return o;}}
+  }catch(e){}
+  return clone(PADRAO);
+}
+function salvar(){try{localStorage.setItem(CHAVE,JSON.stringify(S));}catch(e){}}
+
+const $=(q,r)=>(r||document).querySelector(q);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rs=v=>(v<-0.004?'−':'')+'R$ '+Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pc=v=>(v*100).toLocaleString('pt-BR',{maximumFractionDigits:1})+'%';
+const pc2=v=>(v*100).toLocaleString('pt-BR',{maximumFractionDigits:2})+'%';
+const txt=v=>v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const cls=(r,g)=>r.lucro<-0.004?'ruim':(r.margem<g.margem-1e-6?'alerta':'bom');
+
+/* ---------- produtos ---------- */
+function campo(p,k,rotulo,dica){
+  return '<label for="p-'+p.id+'-'+k+'">'+rotulo+'<input id="p-'+p.id+'-'+k+'" data-p="'+p.id+'" data-f="'+k+'" inputmode="decimal" value="'+esc(p[k])+'">'+(dica?'<small>'+dica+'</small>':'')+'</label>';
+}
+function par(p,a,b,rotulo){
+  return '<label for="p-'+p.id+'-'+a+'">'+rotulo+'<span class="par"><input id="p-'+p.id+'-'+a+'" data-p="'+p.id+'" data-f="'+a+'" inputmode="decimal" value="'+esc(p[a])+'" aria-label="'+rotulo+', largura"><span>×</span><input id="p-'+p.id+'-'+b+'" data-p="'+p.id+'" data-f="'+b+'" inputmode="decimal" value="'+esc(p[b])+'" aria-label="'+rotulo+', altura"></span></label>';
+}
+function prodHTML(p){
+  let h='<article class="prod" id="prod-'+p.id+'"><header>'+
+    '<input class="nome" id="p-'+p.id+'-nome" data-p="'+p.id+'" data-f="nome" value="'+esc(p.nome)+'" aria-label="Nome do produto">'+
+    '<button class="del" type="button" data-a="del" data-p="'+p.id+'">Excluir</button></header>'+
+    '<p class="custo">Custo por peça <strong data-o="custo"></strong><span class="quebra" data-o="quebra"></span><span class="chip" data-o="chip" hidden>custo incompleto</span></p>'+
+    '<details><summary>Custos desta peça</summary><div class="grid">'+
+      campo(p,'base','Item base (R$)','camisa, caneca, botton')+
+      par(p,'w1','h1','Estampa DTF, largura × altura (cm)')+
+      par(p,'w2','h2','2ª estampa ou etiqueta (cm)')+
+      campo(p,'outros','Outros insumos (R$)','DTF UV, miolo, tinta, cordão')+
+      campo(p,'emb','Embalagem (R$)','saquinho, tag, manual')+
+      campo(p,'min','Tempo de trabalho (min)','usa o valor da hora da aba Taxas')+
+    '</div>'+(p.nota?'<p class="nota">'+esc(p.nota)+'</p>':'')+'</details>';
+  for (const [c,nome,f] of CANAIS){
+    h+='<div class="canal" data-c="'+c+'"><span class="tag '+c+'">'+nome+'</span>'+
+      '<input id="p-'+p.id+'-'+f+'" data-p="'+p.id+'" data-f="'+f+'" inputmode="decimal" value="'+esc(p[f])+'" aria-label="Preço em '+nome+'" placeholder="preço">'+
+      '<span class="pill" data-o="pill"></span><span class="det" data-o="det"></span>'+
+      '<button class="sug" type="button" data-a="usar" data-p="'+p.id+'" data-c="'+c+'" data-o="sug"></button></div>';
+  }
+  h+='<div class="combo"><span class="tag feira">Combo na feira</span>'+
+    '<input id="p-'+p.id+'-cq" data-p="'+p.id+'" data-f="cq" inputmode="numeric" value="'+esc(p.cq)+'" aria-label="Quantidade de peças no combo" placeholder="qtd"> por R$ '+
+    '<input id="p-'+p.id+'-cp" data-p="'+p.id+'" data-f="cp" inputmode="decimal" value="'+esc(p.cp)+'" aria-label="Preço do combo" placeholder="preço">'+
+    '<span class="pill" data-o="combo"></span></div></article>';
+  return h;
+}
+function listar(){ $('#lista').innerHTML=S.produtos.map(prodHTML).join(''); atualizarTudo(); }
+function atualizarProduto(p,g){
+  const el=document.getElementById('prod-'+p.id); if(!el) return;
+  const k=custoPeca(p,g), C=k.total;
+  $('[data-o=custo]',el).textContent=rs(C);
+  const partes=[]; if(k.base)partes.push('base '+txt(k.base)); if(k.dtf)partes.push('DTF '+txt(k.dtf)); if(k.outros)partes.push('insumos '+txt(k.outros)); if(k.emb)partes.push('embalagem '+txt(k.emb)); if(k.mo)partes.push('trabalho '+txt(k.mo));
+  $('[data-o=quebra]',el).textContent=partes.join(' + ');
+  $('[data-o=chip]',el).hidden=k.completo;
+  for (const [c,,f] of CANAIS){
+    const row=$('.canal[data-c='+c+']',el), preco=num(p[f]), pill=$('[data-o=pill]',row), det=$('[data-o=det]',row), sug=$('[data-o=sug]',row);
+    pill.className='pill';
+    if (preco>0){
+      const r=calc(c,preco,C,g);
+      if (k.completo){pill.textContent='lucro '+rs(r.lucro)+' · '+pc(r.margem); pill.classList.add(cls(r,g));
+        const piso=precoMin(c,C,g,0,'none'); det.textContent='taxas '+rs(r.taxas+r.extras)+(piso!=null?' · sem prejuízo a partir de '+rs(piso):'');}
+      else {pill.textContent='recebe '+rs(r.recebe); det.textContent='taxas '+rs(r.taxas+r.extras)+' · informe o custo para ver o lucro';}
+    } else {pill.textContent='sem preço'; det.textContent='';}
+    if (k.completo&&C>0){
+      const s=precoMin(c,C,g,g.margem,g[c].arred);
+      sug.disabled=s==null; sug.dataset.v=s==null?'':txt(s);
+      sug.textContent=s==null?'meta inviável aqui':'meta '+pc(g.margem)+': '+rs(s);
+    } else {sug.disabled=true; sug.dataset.v=''; sug.textContent='meta: falta o custo';}
+  }
+  const q=num(p.cq), cp=num(p.cp), cb=$('[data-o=combo]',el); cb.className='pill';
+  if (q>0&&cp>0){const r=calc('feira',cp,C*q,g);
+    if (k.completo){cb.textContent='lucro '+rs(r.lucro)+' · '+pc(r.margem)+' · '+rs(cp/q)+' por peça'; cb.classList.add(cls(r,g));}
+    else cb.textContent=rs(cp/q)+' por peça';}
+  else cb.textContent='ex.: 4 por 15';
+}
+function atualizarTiles(g){
+  const c=S.cfg, regra={
+    feira:'Pagamento '+pc2(g.feira.taxa)+(g.feira.rateio>0?' · rateio da banca '+pc(g.feira.rateio):' · banca fora da conta'),
+    nuvem:(NUVEM[c.nuvem.plano]||NUVEM.comeco).nome+' · '+MEIOS[c.nuvem.meio]+' · '+pc2(g.nuvem.pct)+(g.nuvem.fixa?' + '+rs(g.nuvem.fixa):''),
+    shopee:pc2(g.shopee.c1)+' + '+rs(g.shopee.f1)+' até '+rs(g.shopee.l2-0.01)+' · '+pc2(g.shopee.c2)+' + taxa fixa maior acima'
+  };
+  $('#tiles').innerHTML=CANAIS.map(([k,nome,f])=>{
+    let n=0,ok=0,prej=0;
+    for (const p of S.produtos){const kk=custoPeca(p,g), preco=num(p[f]); if(!kk.completo||preco<=0) continue; n++; const r=calc(k,preco,kk.total,g); if(r.lucro<-0.004)prej++; else if(r.margem>=g.margem-1e-6)ok++;}
+    const estado=prej?'ruim':(ok<n?'alerta':'bom');
+    const conta=n?(ok+' de '+n+' na meta'+(prej?' · '+prej+' no prejuízo':'')):'sem peças com custo';
+    return '<div class="tile"><span class="tag '+k+'">'+nome+'</span><span class="conta '+(n?estado:'')+'">'+conta+'</span><span class="regra">'+esc(regra[k])+'</span></div>';
+  }).join('');
+}
+function atualizarRapida(g){
+  const C=num(S.rapida.custo), preco=num(S.rapida.preco);
+  if (!(C>0)){ $('#rapida').innerHTML='<p class="nota">Informe o custo para ver o preço de cada canal.</p>'; return; }
+  $('#rapida').innerHTML=CANAIS.map(([c,nome])=>{
+    const s=precoMin(c,C,g,g.margem,g[c].arred), piso=precoMin(c,C,g,0,'none');
+    let h='<div class="rap"><span class="tag '+c+'">'+nome+'</span><span class="linha" style="grid-column:auto">meta '+pc(g.margem)+': <b>'+(s==null?'inviável':rs(s))+'</b> · sem prejuízo a partir de <b>'+(piso==null?'—':rs(piso))+'</b></span>';
+    if (preco>0){const r=calc(c,preco,C,g); h+='<span class="linha">A '+rs(preco)+': taxas '+rs(r.taxas+r.extras)+' · <span class="pill '+cls(r,g)+'" style="display:inline-block;padding:2px 8px;border-radius:8px;font-weight:800">lucro '+rs(r.lucro)+' · '+pc(r.margem)+'</span></span>';}
+    return h+'</div>';
+  }).join('');
+}
+function atualizarSaidas(g){
+  const cm2=dtfPorCm2(g), o=$('#o-dtf'); if(o) o.textContent='Cada cm² de estampa custa '+(cm2).toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4})+' reais. Uma estampa de 30 × 30 cm sai por '+rs(900*cm2)+'.';
+  const r=$('#o-rateio'); if(r) r.textContent=g.feira.rateio>0?'Rateio: '+pc(g.feira.rateio)+' de cada venda paga a banca.':(num(S.cfg.feira.fixo)>0?'Sem faturamento esperado, a banca fica fora do preço. Você precisa de '+rs(num(S.cfg.feira.fixo))+' de lucro no fim de semana para cobri-la.':'Informe os custos fixos e o faturamento esperado para a banca entrar no preço.');
+}
+function atualizarTudo(){
+  const g=numeros(S.cfg);
+  for (const p of S.produtos) atualizarProduto(p,g);
+  atualizarTiles(g); atualizarRapida(g); atualizarSaidas(g);
+}
+
+/* ---------- aba Taxas ---------- */
+function cfgGet(path){return path.split('.').reduce((o,k)=>o==null?undefined:o[k],S.cfg);}
+function cfgSet(path,v){const ks=path.split('.'); let o=S.cfg; while(ks.length>1) o=o[ks.shift()]; o[ks[0]]=v;}
+function ci(path,rotulo,dica){return '<label for="cfg-'+path+'">'+rotulo+'<input id="cfg-'+path+'" data-cfg="'+path+'" inputmode="decimal" value="'+esc(cfgGet(path))+'">'+(dica?'<small>'+dica+'</small>':'')+'</label>';}
+function cs(path,rotulo,ops){return '<label for="cfg-'+path+'">'+rotulo+'<select id="cfg-'+path+'" data-cfg="'+path+'">'+Object.keys(ops).map(k=>'<option value="'+k+'"'+(cfgGet(path)===k?' selected':'')+'>'+ops[k]+'</option>').join('')+'</select></label>';}
+function cc(path,rotulo){return '<label for="cfg-'+path+'" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="cfg-'+path+'" data-cfg="'+path+'" style="width:22px;min-height:22px"'+(cfgGet(path)?' checked':'')+'>'+rotulo+'</label>';}
+const ARRED={none:'Sem arredondar',meio:'Para cima, de 50 em 50 centavos',int:'Para cima, real inteiro',90:'Para cima, final ,90'};
+function cfgHTML(){
+  const planos={}; for(const k in NUVEM) planos[k]=NUVEM[k].nome;
+  return '<div style="display:flex;flex-direction:column;gap:14px">'+
+  '<div class="bloco"><h2>Geral</h2><div class="grid">'+
+    ci('margem','Meta de margem (%)','lucro ÷ preço')+
+    ci('valorHora','Valor da sua hora (R$)','vazio = trabalho fora do custo')+
+    ci('outrosPct','Outros % sobre a venda','imposto, comissão; vale nos três canais')+
+    ci('embEnvio','Embalagem de envio (R$)','caixa e plástico; só nas vendas online')+
+  '</div></div>'+
+  '<div class="bloco"><h2>DTF têxtil</h2><p class="sub">O custo da estampa sai da área que ela ocupa no rolo.</p><div class="grid">'+
+    ci('dtfPrecoM','Preço do metro (R$)','PhD Sublimação, 17/11')+
+    ci('dtfLarg','Largura útil (cm)')+
+    ci('dtfAprov','Aproveitamento da folha (%)','estimativa: parte do rolo que vira estampa')+
+  '</div><p class="saida" id="o-dtf"></p></div>'+
+  '<div class="bloco"><h2><span class="tag feira">Feira</span></h2><div class="grid">'+
+    ci('feira.taxa','Taxa do pagamento (%)','Pix costuma ser 0; no cartão, use a taxa da sua maquininha')+
+    ci('feira.fixo','Custos fixos do fim de semana (R$)','banca, transporte, lanche')+
+    ci('feira.fat','Faturamento esperado (R$)','para ratear os custos fixos no preço')+
+    cs('feira.arred','Arredondar o preço sugerido',ARRED)+
+  '</div><p class="saida" id="o-rateio"></p></div>'+
+  '<div class="bloco"><h2><span class="tag nuvem">Nuvemshop</span></h2><p class="sub">Escolher plano e meio de pagamento preenche a taxa. Você pode corrigir os dois campos de taxa à mão.</p><div class="grid">'+
+    cs('nuvem.plano','Plano',planos)+cs('nuvem.meio','Meio de pagamento',MEIOS)+
+    ci('nuvem.pct','Taxa sobre o pedido (%)')+ci('nuvem.fixa','Taxa fixa por pedido (R$)')+
+    ci('nuvem.freteCobrado','Frete cobrado do cliente (R$)','a taxa % também incide sobre ele')+
+    ci('nuvem.freteAbs','Frete que você paga (R$)','se oferecer frete grátis')+
+    cs('nuvem.arred','Arredondar o preço sugerido',ARRED)+
+  '</div><p class="aviso" id="o-nuvem" hidden></p></div>'+
+  '<div class="bloco"><h2><span class="tag shopee">Shopee</span></h2><p class="sub">Comissão por faixa de preço do item. Já inclui a taxa de transação e o programa de frete grátis.</p><div class="grid">'+
+    ci('shopee.c1','Comissão na 1ª faixa (%)')+ci('shopee.f1','Taxa fixa na 1ª faixa (R$)')+ci('shopee.l2','2ª faixa começa em (R$)')+
+    ci('shopee.c2','Comissão nas faixas acima (%)')+ci('shopee.f2','Taxa fixa na 2ª faixa (R$)')+ci('shopee.l3','3ª faixa começa em (R$)')+
+    ci('shopee.f3','Taxa fixa na 3ª faixa (R$)')+ci('shopee.l4','4ª faixa começa em (R$)')+ci('shopee.f4','Taxa fixa na 4ª faixa (R$)')+
+    ci('shopee.extra','% extra (cupom, anúncio)','vazio = não usa')+ci('shopee.cpfExtra','Adicional de vendedor CPF (R$)')+
+    cs('shopee.arred','Arredondar o preço sugerido',ARRED)+
+  '</div>'+cc('shopee.meia','Item barato: taxa fixa limitada a metade do preço')+cc('shopee.cpf','Conta CPF com mais de 450 pedidos em 90 dias')+'</div></div>';
+}
+function montarCfg(){ $('#cfg').innerHTML=cfgHTML(); $('#meta-margem').value=S.cfg.margem; avisoNuvem(); }
+function avisoNuvem(){
+  const o=$('#o-nuvem'); if(!o) return; const m=S.cfg.nuvem.meio;
+  o.hidden=!(m==='outro'||m==='boleto');
+  o.textContent=m==='outro'?'Esta é só a tarifa da Nuvemshop. Some à taxa % o que o seu intermediário de pagamento cobra.':'Boleto a R$ 2,39: valor de uma fonte secundária só. Confira no painel.';
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if (t.dataset.p){const p=S.produtos.find(x=>x.id===t.dataset.p); if(!p) return; p[t.dataset.f]=t.value; salvar(); atualizarTudo(); return;}
+  if (t.dataset.r){S.rapida[t.dataset.r]=t.value; salvar(); atualizarRapida(numeros(S.cfg)); return;}
+  if (t.dataset.cfg){
+    const path=t.dataset.cfg; cfgSet(path,t.type==='checkbox'?t.checked:t.value);
+    if (path==='nuvem.plano'||path==='nuvem.meio'){
+      const x=taxaNuvem(S.cfg.nuvem.plano,S.cfg.nuvem.meio); S.cfg.nuvem.pct=txt(x.pct); S.cfg.nuvem.fixa=txt(x.fixa);
+      document.getElementById('cfg-nuvem.pct').value=S.cfg.nuvem.pct; document.getElementById('cfg-nuvem.fixa').value=S.cfg.nuvem.fixa; avisoNuvem();
+    }
+    if (path==='margem'){const a=$('#meta-margem'), b=document.getElementById('cfg-margem'); if(a!==t)a.value=t.value; if(b&&b!==t)b.value=t.value;}
+    salvar(); atualizarTudo();
+  }
+});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if (b.dataset.a==='usar'&&b.dataset.v){
+    const p=S.produtos.find(x=>x.id===b.dataset.p), f=CANAIS.find(c=>c[0]===b.dataset.c)[2];
+    p[f]=b.dataset.v; document.getElementById('p-'+p.id+'-'+f).value=p[f]; salvar(); atualizarTudo(); return;
+  }
+  if (b.dataset.a==='del'){
+    if (!b.classList.contains('certeza')){b.classList.add('certeza'); b.textContent='Excluir mesmo?'; setTimeout(()=>{b.classList.remove('certeza'); b.textContent='Excluir';},3500); return;}
+    S.produtos=S.produtos.filter(x=>x.id!==b.dataset.p); salvar(); listar(); return;
+  }
+  if (b.id==='add'){
+    const id='n'+Date.now().toString(36); S.produtos.push({id,nome:'Novo produto',base:''}); salvar(); listar();
+    const el=document.getElementById('p-'+id+'-nome'); el.closest('article').querySelector('details').open=true; el.focus(); el.select(); return;
+  }
+  if (b.id==='copiar'){
+    const linhas=S.produtos.map(p=>p.nome+': '+CANAIS.map(([,n,f])=>n+' '+(num(p[f])>0?rs(num(p[f])):'—')).join(' · ')).join('\n');
+    const msg=$('#copiar-msg');
+    try{navigator.clipboard.writeText(linhas).then(()=>{msg.textContent='Tabela copiada. Cole no WhatsApp ou nas notas.';},()=>{msg.textContent='Não deu para copiar neste aparelho.';});}
+    catch(err){msg.textContent='Não deu para copiar neste aparelho.';}
+    return;
+  }
+  if (b.id==='reset'){
+    if (!b.classList.contains('certeza')){b.classList.add('certeza'); b.textContent='Apagar o que alterei e restaurar?'; setTimeout(()=>{b.classList.remove('certeza'); b.textContent='Restaurar valores originais';},4000); return;}
+    S=clone(PADRAO); salvar(); b.classList.remove('certeza'); b.textContent='Restaurar valores originais'; montarCfg(); listar(); $('#r-custo').value=''; $('#r-preco').value='';
+  }
+});
+function rota(){
+  const v=['produtos','conta','taxas'].includes(location.hash.slice(1))?location.hash.slice(1):'produtos';
+  document.querySelectorAll('section.view').forEach(s=>s.classList.toggle('on',s.id==='view-'+v));
+  document.querySelectorAll('nav a').forEach(a=>{if(a.dataset.v===v)a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');});
+}
+window.addEventListener('hashchange',rota);
+montarCfg(); $('#r-custo').value=S.rapida.custo; $('#r-preco').value=S.rapida.preco; listar(); rota();
+</script>
+</body>
+</html>
