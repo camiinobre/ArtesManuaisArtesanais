@@ -7,7 +7,7 @@
 <meta name="description" content="Canecas, copos, camisetas e personalizados feitos à mão em Fortaleza. Encomende pelo WhatsApp ou compre na Shopee.">
 <meta property="og:title" content="Artes Manuais Artesanais">
 <meta property="og:description" content="Canecas, copos, camisetas e personalizados feitos à mão em Fortaleza.">
-<meta property="og:image" content="img/og.png">
+<meta property="og:image" content="https://camiinobre.github.io/ArtesManuaisArtesanais/img/og.png">
 <link rel="icon" href="img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -117,6 +117,11 @@ h2{font:800 clamp(1.7rem,3.4vw,2.4rem)/1.1 var(--titulo);color:var(--indigo);mar
 /* encomenda */
 .encomenda .lista{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:18px;margin:0;padding:0;list-style:none}
 .encomenda li{border:3px dashed var(--hibisco);border-radius:16px;padding:20px 22px;background:#fff}
+.encomenda li.com-foto{grid-column:span 2}
+.encomenda li.com-foto button{all:unset;cursor:zoom-in;display:block;width:100%;margin-bottom:10px}
+.encomenda li.com-foto button:focus-visible{outline:3px solid var(--hibisco);outline-offset:4px}
+.encomenda li.com-foto img{width:100%;height:auto;border-radius:10px}
+@media (max-width:520px){.encomenda li.com-foto{grid-column:auto}}
 .encomenda li h3{font:800 1.25rem/1.2 var(--titulo);color:var(--hibisco);margin:0 0 6px}
 .encomenda li p{margin:0}
 
@@ -220,12 +225,12 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
   <section id="encomenda" class="encomenda">
     <div class="wrap">
       <h2>Sob encomenda</h2>
-      <p class="intro">Também fazemos estas peças. As fotos estão chegando; enquanto isso, peça pelo WhatsApp e mandamos exemplos.</p>
+      <p class="intro">Também fazemos estas peças. Peça pelo WhatsApp e mandamos exemplos; as fotos da cerâmica de Natal já estão aqui.</p>
       <ul class="lista">
         <li><h3>Ímãs de geladeira</h3><p>Com arte da casa ou a sua foto, para lembrança, festa e brinde.</p></li>
         <li><h3>Adesivos e recortes</h3><p>Adesivos e etiquetas recortados na medida, para embalagem, caderno ou lembrancinha.</p></li>
         <li><h3>Estampas Lula e Brasil 13</h3><p>Lula Lá, Brasil 13 e outras artes em camiseta e caneca.</p></li>
-        <li><h3>Cerâmica fria</h3><p>Peças modeladas à mão, com edição especial de Natal.</p></li>
+        <li class="com-foto"><button type="button" data-img="img/ceramica-estrelas.webp" data-nome="Cerâmica fria: estrelas de Natal" aria-label="Ampliar foto: estrelas de cerâmica fria de Natal"><img src="img/ceramica-estrelas-sm.webp" alt="Três estrelas de cerâmica fria pintadas à mão, duas brancas com ramos e frutinhas vermelhas e uma vermelha com flocos dourados" loading="lazy" width="800" height="450"></button><button type="button" data-img="img/ceramica-feliz-natal.webp" data-nome="Cerâmica fria: placa Feliz Natal" aria-label="Ampliar foto: placa Feliz Natal de cerâmica fria"><img src="img/ceramica-feliz-natal-sm.webp" alt="Plaquinha de cerâmica fria com a frase Feliz Natal pintada à mão, entre enfeites de árvore" loading="lazy" width="800" height="450"></button><h3>Cerâmica fria</h3><p>Peças modeladas à mão, com edição especial de Natal. Cada uma é para pendurar na árvore e acompanha cordão.</p></li>
         <li><h3>Sua arte, sua frase</h3><p>Tem uma ideia? Manda a frase ou o desenho que a gente transforma em caneca, copo ou camiseta.</p></li>
       </ul>
     </div>
@@ -307,7 +312,7 @@ document.querySelectorAll('[data-wpp]').forEach(a => { a.href = linkWpp(a.datase
 
 const dlg = document.getElementById('zoom');
 document.addEventListener('click', e => {
-  const b = e.target.closest('.produto button, .ampliar');
+  const b = e.target.closest('.produto button, .ampliar, .com-foto button');
   if (b) { dlg.querySelector('img').src = b.dataset.img; dlg.querySelector('img').alt = b.dataset.nome; dlg.querySelector('p').textContent = b.dataset.nome; dlg.showModal(); }
 });
 dlg.querySelector('.fechar').onclick = () => dlg.close();
