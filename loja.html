@@ -53,7 +53,7 @@ button{font:inherit;color:inherit}
 .cats{position:sticky;top:0;z-index:4;background:var(--papel);padding:12px 0 10px;border-bottom:2px dashed var(--linha);margin-bottom:16px}
 .cats .wrap{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .cats .wrap::-webkit-scrollbar{display:none}
-.cat{flex:none;display:flex;align-items:center;gap:6px;font-weight:800;font-size:14px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--linha);background:var(--cartao);cursor:pointer}
+.cat{flex:none;display:flex;align-items:center;gap:6px;font-weight:800;font-size:14px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--borda-campo);background:var(--cartao);cursor:pointer}
 .cat[aria-pressed="true"]{background:var(--indigo);border-color:var(--indigo);color:var(--papel)}
 .cat svg{width:16px;height:16px}
 
@@ -101,12 +101,12 @@ dialog.folha::backdrop{background:rgba(20,10,51,.55)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chips label{cursor:pointer}
 .chips input{position:absolute;opacity:0;pointer-events:none}
-.chips span{display:inline-block;min-width:44px;text-align:center;padding:8px 12px;border-radius:10px;border:1.5px solid var(--linha);font-weight:800}
+.chips span{display:inline-block;min-width:44px;text-align:center;padding:8px 12px;border-radius:10px;border:1.5px solid var(--borda-campo);font-weight:800}
 .chips input:checked+span{background:var(--indigo);border-color:var(--indigo);color:var(--papel)}
 .chips input:focus-visible+span{outline:3px solid var(--foco);outline-offset:2px}
 input[type=text],textarea{font:inherit;font-size:16px;color:var(--tinta);background:var(--papel);border:1.5px solid var(--borda-campo);border-radius:10px;padding:9px 10px;width:100%}
 .qtd{display:flex;align-items:center;gap:6px}
-.qtd button{width:34px;height:34px;border-radius:9px;border:1.5px solid var(--linha);background:transparent;font-weight:800;font-size:18px;cursor:pointer;line-height:1}
+.qtd button{width:34px;height:34px;border-radius:9px;border:1.5px solid var(--borda-campo);background:transparent;font-weight:800;font-size:18px;cursor:pointer;line-height:1}
 .qtd button:disabled{opacity:.35;cursor:not-allowed}
 .qtd output{min-width:24px;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
 .linha-add{display:flex;align-items:center;justify-content:space-between;gap:12px}
