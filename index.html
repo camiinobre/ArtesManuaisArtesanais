@@ -239,7 +239,7 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
   <section id="bottons" class="quadros">
     <div class="wrap">
       <h2>Bottons</h2>
-      <p class="intro">Bottons de acrílico, todos a R$ 8,00. Peças únicas. Toque na foto para ver maior e no link para pedir.</p>
+      <p class="intro">Bottons de acrílico. Peças únicas. Toque na foto para ver maior e no link para pedir.</p>
       <ul class="grade" id="grade-bottons"></ul>
     </div>
   </section>
@@ -247,7 +247,7 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
   <section id="imas" class="quadros">
     <div class="wrap">
       <h2>Ímãs</h2>
-      <p class="intro">Ímãs de acrílico para geladeira, todos a R$ 8,00. Peças únicas. Toque na foto para ver maior e no link para pedir.</p>
+      <p class="intro">Ímãs de acrílico para geladeira. Peças únicas. Toque na foto para ver maior e no link para pedir.</p>
       <ul class="grade" id="grade-imas"></ul>
     </div>
   </section>
@@ -308,6 +308,8 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
 <script>
 // Catálogo: para adicionar um produto, coloque a foto em img/ (nome.webp e nome-sm.webp) e acrescente uma linha aqui.
 const WPP = '5585982197478';
+// MODO CATÁLOGO: true = esconde os preços. Troque para false quando a loja puder vender com nota fiscal.
+const CATALOGO = true;
 const canecas = [
   ['latina-demais','Latina demais para ser minimalista','Caneca branca'],
   ['coragem-de-desagradar','Tenha a coragem de desagradar','Caneca branca quadrada'],
@@ -399,7 +401,7 @@ const natal = [
 const linkWpp = msg => `https://wa.me/${WPP}?text=${encodeURIComponent(msg)}`;
 const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 function monta(id, itens){
-  document.getElementById(id).innerHTML = itens.map(([img,nome,tipo,preco,desc]) => { const rot = nome||desc; return `
+  document.getElementById(id).innerHTML = itens.map(([img,nome,tipo,preco,desc]) => { if(CATALOGO) preco = 0; const rot = nome||desc; return `
     <li class="produto">
       <button type="button" data-img="img/${img}.webp" data-nome="${rot}" aria-label="Ampliar foto: ${rot}">
         <img src="img/${img}-sm.webp" alt="${tipo} com a arte ${rot}" loading="lazy" width="480" height="600">
