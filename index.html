@@ -106,7 +106,8 @@ h2{font:800 clamp(1.7rem,3.4vw,2.4rem)/1.1 var(--titulo);color:var(--indigo);mar
 .produto .pedir:hover{text-decoration:underline}
 
 .camisetas{background:var(--aquarela)}
-.camisetas .produto img{border-radius:14px}
+.camisetas .produto img,.quadros .produto img{border-radius:14px}
+.quadros .produto .tipo b{opacity:1;color:var(--indigo)}
 .medidas{margin-top:56px;max-width:560px}
 .medidas h3{font:800 1.5rem/1.2 var(--titulo);color:var(--indigo);margin:0 0 6px}
 .medidas p{margin:0 0 14px}
@@ -162,6 +163,7 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
     <nav aria-label="Seções">
       <a href="#canecas">Canecas</a>
       <a href="#camisetas">Camisetas</a>
+      <a href="#quadros">Quadros</a>
       <a href="pedido.html">Monte seu pedido</a>
       <a class="opc" href="#encomenda">Sob encomenda</a>
       <a class="opc" href="#como-pedir">Como pedir</a>
@@ -219,6 +221,14 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
           <img src="img/tabela-medidas-sm.webp" width="600" height="600" loading="lazy" alt="Tabela de medidas da camiseta, altura do ombro à barra por largura de lateral a lateral: PP 63 por 44 cm, P 70 por 49 cm, M 71 por 51 cm, G 75 por 55 cm, GG 77 por 58 cm. Pode haver diferença de até 1,5 cm.">
         </button>
       </div>
+    </div>
+  </section>
+
+  <section id="quadros" class="quadros">
+    <div class="wrap">
+      <h2>Quadros</h2>
+      <p class="intro">Quadros com frases e artes autorais. Toque na foto para ver maior e no link para pedir.</p>
+      <ul class="grade" id="grade-quadros"></ul>
     </div>
   </section>
 
@@ -294,20 +304,40 @@ const camisetas = [
   ['bruxas','Bruxas não se curvam ao fascismo','Camiseta'],
   ['estrela-que-brilha','A estrela que brilha','Camiseta branca'],
 ];
+const quadros = [
+  ['bruxa',"As más vão para onde querem",'Quadro',35],
+  ['caderno',"Caderno rosa",'Quadro',25],
+  ['memoria-afetiva',"Quadro da memória afetiva",'Quadro',25],
+  ['saudade',"Oi, saudade",'Quadro',35],
+  ['chinelo',"Menos dress code, mais chinelo nopé",'Quadro',25],
+  ['nossa-senhora',"Eu não sou santa, mas sei que a santa me adora",'Quadro',25],
+  ['bar',"Barraca de praia",'Quadro',50],
+  ['baralho-quadro',"No meu baralho não há rei maior que a dama",'Quadro',46],
+  ['tabuleiro',"No meu tabuleiro a rainha ganha o jogo",'Quadro',38],
+  ['mulher-oculos',"Imagina o que as mulheres produziriam se também tivessem uma esposa em casa",'Quadro',35],
+  ['todo-mal',"Todo mal que colidir contra mim regridirá",'Quadro',40],
+  ['energias',"Energias negativas não combinam com meus looks",'Quadro',40],
+  ['venus',"Vênus",'Quadro',50],
+  ['ampulheta',"Tem papo que não vale o tic-tac do relógio",'Quadro',40],
+  ['porta-joia',"Porta-joia",'Quadro',40],
+  ['estrela-quadro',"Há de surgir uma estrela no céu cada vez que você sorrir",'Quadro',40],
+];
 const linkWpp = msg => `https://wa.me/${WPP}?text=${encodeURIComponent(msg)}`;
+const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 function monta(id, itens){
-  document.getElementById(id).innerHTML = itens.map(([img,nome,tipo]) => `
+  document.getElementById(id).innerHTML = itens.map(([img,nome,tipo,preco]) => `
     <li class="produto">
       <button type="button" data-img="img/${img}.webp" data-nome="${nome}" aria-label="Ampliar foto: ${nome}">
         <img src="img/${img}-sm.webp" alt="${tipo} com a arte ${nome}" loading="lazy" width="480" height="600">
       </button>
       <h3>${nome}</h3>
-      <p class="tipo">${tipo}</p>
+      <p class="tipo">${tipo}${preco?` · <b>${brl(preco)}</b>`:''}</p>
       <a class="pedir" href="${linkWpp(`Oi! Vi no site e quero: ${tipo} "${nome}".`)}" target="_blank" rel="noopener">Pedir esta no WhatsApp</a>
     </li>`).join('');
 }
 monta('grade-canecas', canecas);
 monta('grade-camisetas', camisetas);
+monta('grade-quadros', quadros);
 document.querySelectorAll('[data-wpp]').forEach(a => { a.href = linkWpp(a.dataset.wpp); a.target='_blank'; a.rel='noopener'; });
 
 const dlg = document.getElementById('zoom');

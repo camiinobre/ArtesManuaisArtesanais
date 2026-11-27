@@ -123,6 +123,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;align-items
       <div class="abas" role="tablist">
         <button class="aba" role="tab" id="aba-canecas" aria-selected="true" data-aba="canecas">Canecas e copos</button>
         <button class="aba" role="tab" id="aba-camisetas" aria-selected="false" data-aba="camisetas">Camisetas</button>
+        <button class="aba" role="tab" id="aba-quadros" aria-selected="false" data-aba="quadros">Quadros</button>
         <button class="aba" role="tab" id="aba-encomenda" aria-selected="false" data-aba="encomenda">Sob encomenda</button>
       </div>
       <div id="vitrine"></div>
@@ -179,6 +180,24 @@ const PRODUTOS = {
     C("estrela-marrom","Caneca","Há de surgir uma estrela",30,{cores:["Marrom","Amarela"],fotoCor:{Marrom:"estrela-marrom",Amarela:"estrela-amarela"}}),
     C("exu-na-defesa","Copo de vidro","Exu na defesa, eu mesma no ataque",20,{estoque:2,pronta:true}),
     C("nao-me-comove","Copo americano","Não me comove o pranto de quem é ruim",12,{estoque:5,pronta:true}),
+  ],
+  quadros:[
+    C("bruxa","Quadro","As más vão para onde querem",35,{estoque:1,pronta:true}),
+    C("caderno","Quadro","Caderno rosa",25,{estoque:1,pronta:true}),
+    C("memoria-afetiva","Quadro","Quadro da memória afetiva",25,{estoque:1,pronta:true}),
+    C("saudade","Quadro","Oi, saudade",35,{estoque:1,pronta:true}),
+    C("chinelo","Quadro","Menos dress code, mais chinelo nopé",25,{estoque:1,pronta:true}),
+    C("nossa-senhora","Quadro","Eu não sou santa, mas sei que a santa me adora",25,{estoque:1,pronta:true}),
+    C("bar","Quadro","Barraca de praia",50,{estoque:1,pronta:true}),
+    C("baralho-quadro","Quadro","No meu baralho não há rei maior que a dama",46,{estoque:1,pronta:true}),
+    C("tabuleiro","Quadro","No meu tabuleiro a rainha ganha o jogo",38,{estoque:1,pronta:true}),
+    C("mulher-oculos","Quadro","Imagina o que as mulheres produziriam se também tivessem uma esposa em casa",35,{estoque:1,pronta:true}),
+    C("todo-mal","Quadro","Todo mal que colidir contra mim regridirá",40,{estoque:1,pronta:true}),
+    C("energias","Quadro","Energias negativas não combinam com meus looks",40,{estoque:1,pronta:true}),
+    C("venus","Quadro","Vênus",50,{estoque:1,pronta:true}),
+    C("ampulheta","Quadro","Tem papo que não vale o tic-tac do relógio",40,{estoque:1,pronta:true}),
+    C("porta-joia","Quadro","Porta-joia",40,{estoque:1,pronta:true}),
+    C("estrela-quadro","Quadro","Há de surgir uma estrela no céu cada vez que você sorrir",40,{estoque:1,pronta:true}),
   ],
   camisetas:[
     C("nordeste-preta","Camiseta","O Nordeste faz tudo",30,{camiseta:true,fotoCor:{Preta:"nordeste-preta",Branca:"nordeste-branca"}}),
@@ -281,7 +300,7 @@ document.addEventListener("click",e=>{
   const t=e.target.closest("button,a"); if(!t) return;
   if(t.dataset.aba){ aba=t.dataset.aba; render(); }
   if(t.dataset.add){
-    const p=[...PRODUTOS.canecas,...PRODUTOS.camisetas].find(x=>x.id===t.dataset.add);
+    const p=[...PRODUTOS.canecas,...PRODUTOS.camisetas,...PRODUTOS.quadros].find(x=>x.id===t.dataset.add);
     let detalhe="", chave=p.id;
     if(p.camiseta){ const cor=$("#cor-"+p.id).value, tam=$("#tam-"+p.id).value; detalhe=`${cor}, ${tam}`; chave+=`|${cor}|${tam}`; }
     if(p.cores){ const cor=$("#cor-"+p.id).value; detalhe=cor; chave+="|"+cor; }
@@ -299,7 +318,7 @@ document.addEventListener("click",e=>{
   }
   if(t.dataset.menos!==undefined){ const i=+t.dataset.menos; pedido[i].qtd--; if(!pedido[i].qtd) pedido.splice(i,1); render(); }
   if(t.dataset.mais!==undefined){ const i=+t.dataset.mais; const p=pedido[i]; const total=p.max?qtdNoPedido(p.prodId):0;
-    const prod=[...PRODUTOS.canecas].find(x=>x.id===p.prodId); if(!prod?.estoque || total<prod.estoque){p.qtd++;} render(); }
+    const prod=[...PRODUTOS.canecas,...PRODUTOS.quadros].find(x=>x.id===p.prodId); if(!prod?.estoque || total<prod.estoque){p.qtd++;} render(); }
   if(t.id==="copiar"){
     if(!pedido.length){ toast("Adicione uma peça primeiro"); return; }
     const txt=mensagem();
