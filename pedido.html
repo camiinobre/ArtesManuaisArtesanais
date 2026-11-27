@@ -126,6 +126,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;align-items
         <button class="aba" role="tab" id="aba-quadros" aria-selected="false" data-aba="quadros">Quadros</button>
         <button class="aba" role="tab" id="aba-bottons" aria-selected="false" data-aba="bottons">Bottons</button>
         <button class="aba" role="tab" id="aba-imas" aria-selected="false" data-aba="imas">Ímãs</button>
+        <button class="aba" role="tab" id="aba-natal" aria-selected="false" data-aba="natal">Natal</button>
         <button class="aba" role="tab" id="aba-encomenda" aria-selected="false" data-aba="encomenda">Sob encomenda</button>
       </div>
       <div id="vitrine"></div>
@@ -210,6 +211,36 @@ const PRODUTOS = {
     C("botton-estrela","Botton","",8,{desc:"estrela de Mario"}),
     C("botton-one-piece","Botton","",8,{desc:"One Piece"}),
   ],
+  natal:[
+    C("natal-01","Enfeite de Natal","",20,{desc:"árvore com luzes"}),
+    C("natal-02","Enfeite de Natal","",15,{desc:"Fé"}),
+    C("natal-03","Enfeite de Natal","",20,{desc:"árvore colorida"}),
+    C("natal-04","Enfeite de Natal","",18,{desc:"bola de ondas"}),
+    C("natal-05","Enfeite de Natal","",20,{desc:"estrela com frutinhas"}),
+    C("natal-06","Enfeite de Natal","",20,{desc:"árvore verde"}),
+    C("natal-07","Enfeite de Natal","",18,{desc:"bola com árvore e ramos"}),
+    C("natal-08","Enfeite de Natal","",20,{desc:"Papai Noel"}),
+    C("natal-09","Enfeite de Natal","",15,{desc:"sininho vermelho"}),
+    C("natal-10","Enfeite de Natal","",15,{desc:"União"}),
+    C("natal-11","Enfeite de Natal","",18,{desc:"sino, estrelas e presente"}),
+    C("natal-12","Enfeite de Natal","",15,{desc:"União"}),
+    C("natal-13","Enfeite de Natal","",15,{desc:"Alegria"}),
+    C("natal-14","Enfeite de Natal","",15,{desc:"Felicidade"}),
+    C("natal-15","Enfeite de Natal","",15,{desc:"Amor"}),
+    C("natal-16","Enfeite de Natal","",15,{desc:"Sorte"}),
+    C("natal-17","Enfeite de Natal","",20,{desc:"estrela com frutinhas"}),
+    C("natal-18","Enfeite de Natal","",20,{desc:"Papai Noel"}),
+    C("natal-19","Enfeite de Natal","",15,{desc:"Saúde"}),
+    C("natal-20","Enfeite de Natal","",15,{desc:"Fé"}),
+    C("natal-21","Enfeite de Natal","",18,{desc:"Feliz Natal"}),
+    C("natal-22","Enfeite de Natal","",20,{desc:"Papai Noel"}),
+    C("natal-23","Enfeite de Natal","",15,{desc:"Prosperidade"}),
+    C("natal-24","Enfeite de Natal","",15,{desc:"guirlanda"}),
+    C("natal-25","Enfeite de Natal","",18,{desc:"bola de losangos"}),
+    C("natal-26","Enfeite de Natal","",15,{desc:"Fé"}),
+    C("natal-27","Enfeite de Natal","",15,{desc:"Sorte"}),
+    C("natal-28","Enfeite de Natal","",20,{desc:"Papai Noel"}),
+  ],
   imas:[
     C("ima-demon-slayer","Ímã","",8,{desc:"Demon Slayer"}),
     C("ima-bt21","Ímã","",8,{desc:"BT21"}),
@@ -227,7 +258,7 @@ const ENCOMENDA = [
   {id:"imas",nome:"Ímãs de geladeira",txt:"Com arte da casa ou a sua foto, para lembrança, festa e brinde."},
   {id:"adesivos",nome:"Adesivos e recortes",txt:"Adesivos e etiquetas recortados na medida, para embalagem ou lembrancinha."},
   {id:"lula",nome:"Estampas Lula e Brasil 13",txt:"Lula Lá, Brasil 13 e outras artes em camiseta e caneca."},
-  {id:"ceramica",nome:"Cerâmica fria",txt:"Peças modeladas à mão, com edição especial de Natal."},
+  {id:"ceramica",nome:"Cerâmica fria sob encomenda",txt:"Outros desenhos e frases de Natal, modelados à mão. Os enfeites prontos estão na aba Natal."},
 ];
 
 const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});

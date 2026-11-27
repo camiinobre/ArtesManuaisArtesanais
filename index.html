@@ -107,7 +107,7 @@ h2{font:800 clamp(1.7rem,3.4vw,2.4rem)/1.1 var(--titulo);color:var(--indigo);mar
 
 .camisetas{background:var(--aquarela)}
 .camisetas .produto img,.quadros .produto img{border-radius:14px}
-#bottons .produto img,#imas .produto img{background:#d8dcdc}
+#bottons .produto img,#imas .produto img,#natal .produto img{background:#d8dcdc}
 .quadros .produto .tipo b{opacity:1;color:var(--indigo)}
 .medidas{margin-top:56px;max-width:560px}
 .medidas h3{font:800 1.5rem/1.2 var(--titulo);color:var(--indigo);margin:0 0 6px}
@@ -167,6 +167,7 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
       <a href="#quadros">Quadros</a>
       <a href="#bottons">Bottons</a>
       <a href="#imas">Ímãs</a>
+      <a href="#natal">Natal</a>
       <a href="pedido.html">Monte seu pedido</a>
       <a class="opc" href="#encomenda">Sob encomenda</a>
       <a class="opc" href="#como-pedir">Como pedir</a>
@@ -251,15 +252,23 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
     </div>
   </section>
 
+  <section id="natal" class="quadros">
+    <div class="wrap">
+      <h2>Enfeites de Natal</h2>
+      <p class="intro">Cerâmica fria modelada e pintada à mão, para pendurar na árvore, com cordão. Toque na foto para ver maior e no link para pedir.</p>
+      <ul class="grade" id="grade-natal"></ul>
+    </div>
+  </section>
+
   <section id="encomenda" class="encomenda">
     <div class="wrap">
       <h2>Sob encomenda</h2>
-      <p class="intro">Também fazemos estas peças. Peça pelo WhatsApp e mandamos exemplos; as fotos da cerâmica de Natal já estão aqui.</p>
+      <p class="intro">Também fazemos estas peças. Peça pelo WhatsApp e mandamos exemplos.</p>
       <ul class="lista">
         <li><h3>Ímãs de geladeira</h3><p>Com arte da casa ou a sua foto, para lembrança, festa e brinde.</p></li>
         <li><h3>Adesivos e recortes</h3><p>Adesivos e etiquetas recortados na medida, para embalagem, caderno ou lembrancinha.</p></li>
         <li><h3>Estampas Lula e Brasil 13</h3><p>Lula Lá, Brasil 13 e outras artes em camiseta e caneca.</p></li>
-        <li class="com-foto"><button type="button" data-img="img/ceramica-estrelas.webp" data-nome="Cerâmica fria: estrelas de Natal" aria-label="Ampliar foto: estrelas de cerâmica fria de Natal"><img src="img/ceramica-estrelas-sm.webp" alt="Três estrelas de cerâmica fria pintadas à mão, duas brancas com ramos e frutinhas vermelhas e uma vermelha com flocos dourados" loading="lazy" width="800" height="450"></button><button type="button" data-img="img/ceramica-feliz-natal.webp" data-nome="Cerâmica fria: placa Feliz Natal" aria-label="Ampliar foto: placa Feliz Natal de cerâmica fria"><img src="img/ceramica-feliz-natal-sm.webp" alt="Plaquinha de cerâmica fria com a frase Feliz Natal pintada à mão, entre enfeites de árvore" loading="lazy" width="800" height="450"></button><h3>Cerâmica fria</h3><p>Peças modeladas à mão, com edição especial de Natal. Cada uma é para pendurar na árvore e acompanha cordão.</p></li>
+        <li><h3>Cerâmica fria</h3><p>Outros desenhos e frases de Natal, modelados à mão. Veja os enfeites prontos na seção Enfeites de Natal.</p></li>
         <li><h3>Sua arte, sua frase</h3><p>Tem uma ideia? Manda a frase ou o desenho que a gente transforma em caneca, copo ou camiseta.</p></li>
       </ul>
     </div>
@@ -356,6 +365,36 @@ const imas = [
   ['ima-grinch','','Ímã',8,'Grinch de Natal'],
   ['ima-naruto','','Ímã',8,'Naruto'],
 ];
+const natal = [
+  ['natal-01','','Enfeite de Natal',20,'árvore com luzes'],
+  ['natal-02','','Enfeite de Natal',15,'Fé'],
+  ['natal-03','','Enfeite de Natal',20,'árvore colorida'],
+  ['natal-04','','Enfeite de Natal',18,'bola de ondas'],
+  ['natal-05','','Enfeite de Natal',20,'estrela com frutinhas'],
+  ['natal-06','','Enfeite de Natal',20,'árvore verde'],
+  ['natal-07','','Enfeite de Natal',18,'bola com árvore e ramos'],
+  ['natal-08','','Enfeite de Natal',20,'Papai Noel'],
+  ['natal-09','','Enfeite de Natal',15,'sininho vermelho'],
+  ['natal-10','','Enfeite de Natal',15,'União'],
+  ['natal-11','','Enfeite de Natal',18,'sino, estrelas e presente'],
+  ['natal-12','','Enfeite de Natal',15,'União'],
+  ['natal-13','','Enfeite de Natal',15,'Alegria'],
+  ['natal-14','','Enfeite de Natal',15,'Felicidade'],
+  ['natal-15','','Enfeite de Natal',15,'Amor'],
+  ['natal-16','','Enfeite de Natal',15,'Sorte'],
+  ['natal-17','','Enfeite de Natal',20,'estrela com frutinhas'],
+  ['natal-18','','Enfeite de Natal',20,'Papai Noel'],
+  ['natal-19','','Enfeite de Natal',15,'Saúde'],
+  ['natal-20','','Enfeite de Natal',15,'Fé'],
+  ['natal-21','','Enfeite de Natal',18,'Feliz Natal'],
+  ['natal-22','','Enfeite de Natal',20,'Papai Noel'],
+  ['natal-23','','Enfeite de Natal',15,'Prosperidade'],
+  ['natal-24','','Enfeite de Natal',15,'guirlanda'],
+  ['natal-25','','Enfeite de Natal',18,'bola de losangos'],
+  ['natal-26','','Enfeite de Natal',15,'Fé'],
+  ['natal-27','','Enfeite de Natal',15,'Sorte'],
+  ['natal-28','','Enfeite de Natal',20,'Papai Noel'],
+];
 const linkWpp = msg => `https://wa.me/${WPP}?text=${encodeURIComponent(msg)}`;
 const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 function monta(id, itens){
@@ -374,6 +413,7 @@ monta('grade-camisetas', camisetas);
 monta('grade-quadros', quadros);
 monta('grade-bottons', bottons);
 monta('grade-imas', imas);
+monta('grade-natal', natal);
 document.querySelectorAll('[data-wpp]').forEach(a => { a.href = linkWpp(a.dataset.wpp); a.target='_blank'; a.rel='noopener'; });
 
 const dlg = document.getElementById('zoom');
