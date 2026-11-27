@@ -74,7 +74,7 @@ python3 .claude/hooks/confere-produtos.py
 
 Tem de sair sem nada. Se acusar algo, corrija e rode de novo.
 
-Depois suba o site (`python3 -m http.server 8765`) e abra as três páginas no navegador: o produto aparece na categoria certa, a foto carrega, o nome e o preço estão iguais nas três, e o link "Pedir esta no WhatsApp" de `index.html` leva o tipo, o nome e o preço na mensagem. Tire um print de cada página com o produto visível.
+Depois suba o site (`python3 -m http.server 8765`) e abra as três páginas no navegador: o produto aparece na categoria certa, a foto carrega, o preço está igual nas três, e o link "Pedir esta no WhatsApp" de `index.html` leva o tipo, o nome e o preço na mensagem. Tire um print de cada página com o produto visível.
 
 ## 5. Entregue
 
