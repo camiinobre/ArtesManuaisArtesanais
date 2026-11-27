@@ -26,6 +26,8 @@ python3 -m http.server 8765
 3. Variação de cor não é produto novo no simulador nem na loja: entra em `fotoCor` do produto principal (ver `estrela-marrom` e `nordeste-preta`), mas tem linha própria em `index.html`.
 4. O preço precisa ser o mesmo nas páginas em que aparece.
 
+O skill `/novo-produto` faz esse passo a passo, e `.claude/skills/novo-produto/fotos.py` gera as duas fotos a partir da original.
+
 O hook `.claude/hooks/confere-produtos.py` roda depois de cada edição nessas páginas ou em `img/` e acusa produto faltando, foto faltando e preço diferente. Para rodar à mão:
 
 ```bash
