@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Loja | Artes Manuais Artesanais</title>
-<meta name="description" content="Escolha canecas, copos e camisetas feitos à mão, monte sua sacola, pague com Pix e envie o pedido pelo WhatsApp.">
+<meta name="description" content="Canecas, copos, camisetas, quadros e enfeites feitos à mão em Fortaleza. Escolha as peças e fale com a gente pelo WhatsApp.">
 <meta property="og:title" content="Loja | Artes Manuais Artesanais">
-<meta property="og:description" content="Escolha as peças, pague com Pix e mande o pedido pronto no WhatsApp.">
+<meta property="og:description" content="Peças feitas à mão em Fortaleza. Escolha e fale com a gente pelo WhatsApp.">
 <meta property="og:image" content="https://camiinobre.github.io/ArtesManuaisArtesanais/img/og.png">
 <link rel="icon" href="img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -147,6 +147,8 @@ input[type=text],textarea{font:inherit;font-size:16px;color:var(--tinta);backgro
 .toast.on{opacity:1}
 footer{margin-top:40px;padding:20px 0;border-top:2px dashed var(--linha);color:var(--suave);font-size:13px;text-align:center}
 footer a{color:var(--indigo)}
+/* Modo catálogo: sem preços, sem Pix */
+body.catalogo .totais,body.catalogo #grupo-pag,body.catalogo #pix-area,body.catalogo .selo.pix{display:none!important}
 </style>
 </head>
 <body>
@@ -203,7 +205,7 @@ footer a{color:var(--indigo)}
       <div class="l grande"><span>Total</span><span id="t-total">R$ 0,00</span></div>
       <div class="prazo" id="t-prazo"></div>
     </div>
-    <div class="grupo"><span class="legenda">Pagamento</span>
+    <div class="grupo" id="grupo-pag"><span class="legenda">Pagamento</span>
       <div class="entregas">
         <label><input type="radio" name="pag" value="pix" checked> Pix agora (copia e cola ou QR Code)</label>
         <label><input type="radio" name="pag" value="combinar"> Combinar no WhatsApp</label>
@@ -230,6 +232,10 @@ const PIX = {
 };
 const PIX_DESCONTO = 0;   // ex.: 0.05 = 5% de desconto no Pix. 0 = sem desconto.
 const PRAZO = "Pronto em até 3 dias úteis após a confirmação";
+/* MODO CATÁLOGO: true = esconde preços e Pix; a cliente monta uma lista e manda no WhatsApp.
+   Troque para false quando a loja puder vender com nota fiscal (certificado A1 ativo). */
+const CATALOGO = true;
+const SAC = CATALOGO ? "lista" : "sacola";
 const CORES_CAMISETA = ["Branca","Preta","Vermelha","Amarela"];
 const TAMANHOS = ["PP","P","M","G","GG"];
 
@@ -246,20 +252,20 @@ const CATS = [
 ];
 const P = (id,cat,tipo,nome,preco,extra={}) => ({id,cat,tipo,nome,preco,foto:id,...extra});
 const PRODUTOS = [
-  P("latina-demais","canecas","Caneca","Latina demais para ser minimalista",30),
-  P("coragem-de-desagradar","canecas","Caneca","Tenha a coragem de desagradar",30),
-  P("praticar-a-rebeldia","canecas","Caneca","Praticar a rebeldia de não ser perfeita",30),
-  P("rainha","canecas","Caneca","No meu tabuleiro, a rainha ganha o jogo",30),
-  P("tardezinha","canecas","Caneca","De tarde não, de tardezinha",30),
-  P("baralho","canecas","Caneca","No meu baralho não há rei maior que a dama",30),
-  P("deixa-digam","canecas","Caneca","Deixa que digam, que pensem, que falem",30),
-  P("corazon-partio","canecas","Caneca","Tiritas pra esse corazón partío",30),
-  P("onca","canecas","Caneca","Calma como uma onça",30),
-  P("desobediencia","canecas","Caneca","Nunca reverenciar, sempre desobedecer",30),
-  P("nao-vale-a-pena","canecas","Caneca","Não vale a pena trazer esse teu amor de volta",30),
-  P("jesus","canecas","Caneca","Cristo abençoador",30),
-  P("estrela-marrom","canecas","Caneca","Há de surgir uma estrela",30,{cores:["Marrom","Amarela"],fotoCor:{Marrom:"estrela-marrom",Amarela:"estrela-amarela"}}),
-  P("exu-na-defesa","copos","Copo de vidro","Exu na defesa, eu mesma no ataque",20,{estoque:2,pronta:true}),
+  P("latina-demais","canecas","Caneca branca","Latina demais para ser minimalista",47,{estoque:1,pronta:true}),
+  P("coragem-de-desagradar","canecas","Caneca branca quadrada","Tenha a coragem de desagradar",45,{estoque:1,pronta:true}),
+  P("praticar-a-rebeldia","canecas","Caneca","Praticar a rebeldia de não ser perfeita",0,{estoque:1,pronta:true,combinar:true}),
+  P("rainha","canecas","Caneca cinza fosca","No meu tabuleiro, a rainha ganha o jogo",47,{estoque:1,pronta:true}),
+  P("tardezinha","canecas","Caneca branca","De tarde não, de tardezinha",42,{estoque:1,pronta:true}),
+  P("baralho","canecas","Caneca vermelha","No meu baralho não há rei maior que a dama",45,{estoque:1,pronta:true}),
+  P("deixa-digam","canecas","Caneca","Deixa que digam, que pensem, que falem",0,{estoque:1,pronta:true,combinar:true}),
+  P("corazon-partio","canecas","Caneca preta","Tiritas pra esse corazón partío",38,{estoque:1,pronta:true}),
+  P("onca","canecas","Caneca","Calma como uma onça",0,{estoque:1,pronta:true,combinar:true}),
+  P("desobediencia","canecas","Caneca creme","Nunca reverenciar, sempre desobedecer",40,{estoque:1,pronta:true}),
+  P("nao-vale-a-pena","canecas","Caneca","Não vale a pena trazer esse teu amor de volta",0,{estoque:1,pronta:true,combinar:true}),
+  P("jesus","canecas","Caneca terracota","Cristo abençoador",40,{estoque:1,pronta:true}),
+  P("estrela-marrom","canecas","Caneca","Há de surgir uma estrela",0,{combinar:true,pronta:true,cores:["Marrom","Amarela"],fotoCor:{Marrom:"estrela-marrom",Amarela:"estrela-amarela"}}),
+  P("exu-na-defesa","copos","Copo de vidro","Exu na defesa, eu mesma no ataque",35,{estoque:2,pronta:true}),
   P("nao-me-comove","copos","Copo americano","Não me comove o pranto de quem é ruim",12,{estoque:5,pronta:true}),
   P("nordeste-preta","camisetas","Camiseta","O Nordeste faz tudo",30,{cores:CORES_CAMISETA,tamanhos:TAMANHOS,fotoCor:{Preta:"nordeste-preta",Branca:"nordeste-branca"}}),
   P("bruxas","camisetas","Camiseta","Bruxas não se curvam ao fascismo",30,{cores:CORES_CAMISETA,tamanhos:TAMANHOS}),
@@ -320,7 +326,7 @@ const PRODUTOS = [
   P("ima-bt21","imas","Ímã","BTS",8,{estoque:1,pronta:true}),
   P("ima-grinch","imas","Ímã","Grinch de Natal",8,{estoque:1,pronta:true}),
   P("ima-naruto","imas","Ímã","Naruto",8,{estoque:1,pronta:true}),
-  P("sua-arte","encomenda","Personalizado","Sua arte, sua frase",30,{foto:null,texto:"Mande a frase ou o desenho e a gente transforma na peça.",bases:[["Caneca",30],["Camiseta",30],["Copo americano",12]]}),
+  P("sua-arte","encomenda","Personalizado","Sua arte, sua frase",30,{foto:null,texto:"Mande a frase ou o desenho e a gente transforma na peça.",bases:[["Caneca branca",30],["Camiseta",30],["Copo americano",12]]}),
   P("ceramica","encomenda","Sob encomenda","Cerâmica fria sob encomenda",0,{foto:"ceramica-feliz-natal",combinar:true,texto:"Outros desenhos e frases de Natal, modelados à mão. Os enfeites prontos estão na categoria Natal."}),
   P("imas","encomenda","Sob encomenda","Ímãs de geladeira",0,{foto:null,combinar:true,texto:"Com arte da casa ou a sua foto, para lembrança, festa e brinde."}),
   P("adesivos","encomenda","Sob encomenda","Adesivos e recortes",0,{foto:null,combinar:true,texto:"Adesivos e etiquetas recortados na medida, para embalagem ou lembrancinha."}),
@@ -398,17 +404,17 @@ function card(p){
   const f = fotoSm(p.foto);
   const r = restam(p);
   const naSacola = qtdDe(p.id) > 0;
-  const etq = p.estoque ? `<span class="etq">${r>0?(p.estoque===1?"Peça única":`Restam ${r}`):naSacola?"Na sacola":"Esgotado"}</span>` : p.pronta ? `<span class="etq">Pronta entrega</span>` : "";
+  const etq = p.estoque ? `<span class="etq">${r>0?(p.estoque===1?"Peça única":`Restam ${r}`):naSacola?`Na ${SAC}`:"Esgotado"}</span>` : p.pronta ? `<span class="etq">Pronta entrega</span>` : "";
   const img = f ? `<img class="foto" src="${f}" alt="${esc(p.tipo+": "+p.nome)}" loading="lazy" width="480" height="600">`
                 : `<div class="sem-foto" aria-hidden="true">${esc(p.nome)}</div>`;
-  const preco = p.combinar ? `<span class="preco combinar">valor a combinar</span>`
+  const preco = CATALOGO ? `<span class="preco combinar">preço no WhatsApp</span>` : p.combinar ? `<span class="preco combinar">valor a combinar</span>`
     : `<span class="preco">${p.bases?"a partir de ":""}${brl(p.bases?Math.min(...p.bases.map(b=>b[1])):p.preco)}</span>`
       + (PIX_DESCONTO>0 && !p.bases ? `<span class="preco-pix">${brl(precoPix(p.preco))} no Pix</span>` : "");
   const temOpcao = p.cores || p.tamanhos || p.bases;
   const rotulo = p.combinar ? "Pedir orçamento" : temOpcao ? "Escolher" : "+ Adicionar";
   return `<li class="peca"><button class="abrir" type="button" data-ver="${p.id}" aria-label="Ver detalhes: ${esc(p.nome)}">${img}${etq}</button>
     <div class="corpo"><span class="tipo">${esc(p.tipo)}</span><h3 class="nome">${esc(p.nome)}</h3>${preco}
-    <button class="add" type="button" data-add="${p.id}" ${r<=0?"disabled":""}>${r<=0?(naSacola?"Na sacola ✓":"Esgotado"):rotulo}</button></div></li>`;
+    <button class="add" type="button" data-add="${p.id}" ${r<=0?"disabled":""}>${r<=0?(naSacola?`Na ${SAC} ✓`:"Esgotado"):rotulo}</button></div></li>`;
 }
 function renderGrade(){
   const lista = PRODUTOS.filter(p=>cat==="todos"||p.cat===cat);
@@ -425,17 +431,17 @@ function abrirDetalhe(id){
   const f = fotoGr(p.foto);
   const r = restam(p);
   let h = f ? `<img class="det-foto" id="det-img" src="${f}" alt="${esc(p.tipo+": "+p.nome)}">` : "";
-  h += `<p class="det-txt"><b>${esc(p.tipo)}</b>${p.texto?` · ${esc(p.texto)}`:""}${p.estoque?` · ${r>0?(p.estoque===1?"peça única":`restam ${r}`):qtdDe(p.id)?"já está na sacola":"esgotado"}`:""}</p>`;
+  h += `<p class="det-txt"><b>${esc(p.tipo)}</b>${p.texto?` · ${esc(p.texto)}`:""}${p.estoque?` · ${r>0?(p.estoque===1?"peça única":`restam ${r}`):qtdDe(p.id)?`já está na ${SAC}`:"esgotado"}`:""}</p>`;
   if(p.bases) h += `<div class="grupo"><span class="legenda">Peça</span>${chips("base",p.bases.map(b=>b[0]),p.bases[0][0])}</div>
     <div class="grupo"><label for="frase">Sua frase ou ideia</label><textarea id="frase" rows="2" placeholder="Ex.: o nome da minha avó com flores de ipê"></textarea></div>`;
   if(p.cores){ const corFoto = p.fotoCor ? Object.keys(p.fotoCor).find(k=>p.fotoCor[k]===p.foto) : null;
     h += `<div class="grupo"><span class="legenda">Cor</span>${chips("cor",p.cores,corFoto||p.cores[0])}</div>`; }
   if(p.tamanhos) h += `<div class="grupo"><span class="legenda">Tamanho <a href="./#medidas" target="_blank" rel="noopener" style="text-transform:none;letter-spacing:0;font-weight:700">ver medidas</a></span>${chips("tam",p.tamanhos,"M")}</div>`;
-  if(p.combinar) h += `<p class="nota">Esta peça é feita sob medida. Ela entra na sacola como pedido de orçamento e o valor é combinado no WhatsApp.</p>`;
+  if(p.combinar) h += `<p class="nota">Esta peça é feita sob medida. Ela entra na ${SAC} como pedido de orçamento e o valor é combinado no WhatsApp.</p>`;
   h += `<div class="linha-add">
     ${p.combinar?"<span></span>":`<div class="qtd"><button type="button" data-q="-1" aria-label="Menos uma">−</button><output id="det-qtd">1</output><button type="button" data-q="1" aria-label="Mais uma">+</button></div>`}
-    <span class="preco" id="det-preco">${p.combinar?"":brl(p.bases?p.bases[0][1]:p.preco)}</span></div>
-    <button class="principal amarelo" type="button" id="det-add" data-prod="${p.id}" ${r<=0?"disabled":""}>${r<=0?(qtdDe(p.id)?"Já está na sacola":"Esgotado"):p.combinar?"Pedir orçamento":"Adicionar à sacola"}</button>`;
+    <span class="preco" id="det-preco">${p.combinar||CATALOGO?"":brl(p.bases?p.bases[0][1]:p.preco)}</span></div>
+    <button class="principal amarelo" type="button" id="det-add" data-prod="${p.id}" ${r<=0?"disabled":""}>${r<=0?(qtdDe(p.id)?`Já está na ${SAC}`:"Esgotado"):p.combinar?"Pedir orçamento":`Adicionar à ${SAC}`}</button>`;
   $("#det-corpo").innerHTML = h;
   d.showModal(); d.querySelector(".conteudo").scrollTop = 0;
 }
@@ -445,7 +451,7 @@ function precoDetalhe(p){
 }
 function atualizaDetalhe(){
   const p = byId($("#det-add").dataset.prod); const q = $("#det-qtd");
-  if(q) $("#det-preco").textContent = brl(precoDetalhe(p)*(+q.textContent));
+  if(q&&!CATALOGO) $("#det-preco").textContent = brl(precoDetalhe(p)*(+q.textContent));
 }
 function adicionar(p,{detalhe="",frase="",preco=p.preco,qtd=1}={}){
   const chave = [p.id,detalhe,frase].join("|");
@@ -455,7 +461,7 @@ function adicionar(p,{detalhe="",frase="",preco=p.preco,qtd=1}={}){
   if(n<=0){ toast("Essa peça esgotou"); return false; }
   if(ex) ex.qtd += p.combinar ? 0 : n; else sacola.push({chave,prodId:p.id,detalhe,frase,preco,qtd:p.combinar?1:n});
   salvar(); renderTudo();
-  toast(p.combinar ? `Orçamento de “${p.nome}” na sacola` : `${n}× “${p.nome}” na sacola`);
+  toast(p.combinar ? `Orçamento de “${p.nome}” na ${SAC}` : `${n}× “${p.nome}” na ${SAC}`);
   return true;
 }
 function addDoDetalhe(){
@@ -488,13 +494,13 @@ function detItem(i){ const p=itemProd(i); return p.bases ? "" : i.detalhe; }
 function renderSacola(){
   const c = contas();
   const ul = $("#itens");
-  ul.innerHTML = !sacola.length ? `<li class="nota" style="text-align:center;padding:16px 0">Sua sacola está vazia.</li>` :
+  ul.innerHTML = !sacola.length ? `<li class="nota" style="text-align:center;padding:16px 0">Sua ${SAC} está vazia.</li>` :
     sacola.map((i,k)=>{ const p=itemProd(i); const f=fotoSm(i.detalhe&&p.fotoCor?.[i.detalhe.split(", ")[0]]||p.foto);
       const maisOff = p.combinar || restam(p)<=0;
       return `<li class="item">${f?`<img src="${f}" alt="">`:`<span class="mini"></span>`}
       <div><b>${esc(nomeItem(i))}</b>${detItem(i)?`<small>${esc(detItem(i))}</small>`:""}</div>
-      <span class="val">${p.combinar?"orçamento":brl(i.preco*i.qtd)}</span>
-      <div style="grid-column:2"><small>${p.combinar?"valor a combinar":brl(i.preco)+" cada"}</small></div>
+      ${CATALOGO?"":`<span class="val">${p.combinar?"orçamento":brl(i.preco*i.qtd)}</span>
+      <div style="grid-column:2"><small>${p.combinar?"valor a combinar":brl(i.preco)+" cada"}</small></div>`}
       <div class="qtd"><button type="button" data-menos="${k}" aria-label="Tirar uma">−</button><output>${i.qtd}</output><button type="button" data-mais="${k}" aria-label="Mais uma" ${maisOff?"disabled":""}>+</button></div></li>`; }).join("");
   $("#t-sub").textContent = brl(c.sub);
   $("#t-frete").textContent = c.frete ? "a combinar" : "sem frete";
@@ -506,6 +512,7 @@ function renderSacola(){
 }
 function renderPix(c){
   const area = $("#pix-area");
+  if(CATALOGO){ area.innerHTML=""; return; }
   if(c.pag!=="pix" || !sacola.length){ area.innerHTML=""; return; }
   if(c.sub<=0){ area.innerHTML = `<p class="nota">Sua sacola só tem itens de orçamento. Envie o pedido e a gente manda o valor pelo WhatsApp.</p>`; return; }
   const codigoPix = pixCopiaECola(c.pix);
@@ -526,6 +533,12 @@ function renderPix(c){
 function mensagem(){
   const c = contas();
   const nome = $("#nome").value.trim(), obs = $("#obs").value.trim();
+  if(CATALOGO){
+    const ls = [];
+    sacola.forEach(i=>{ ls.push(`• ${nomeItem(i)} x${i.qtd}`); if(detItem(i)) ls.push(`   ↳ ${detItem(i)}`); });
+    return [`🧾 Lista ${codigo} — Artes Manuais`, "", "Olá! Gostei destas peças e quero saber preço e disponibilidade:", ...ls, "",
+      `🚚 ${c.ent}`, nome?`👤 Nome: ${nome}`:null, obs?`📝 Obs.: ${obs}`:null].filter(l=>l!==null).join("\n");
+  }
   const linhas = [];
   sacola.forEach(i=>{ const p=itemProd(i);
     linhas.push(`• ${nomeItem(i)} x${i.qtd} — ${p.combinar?"orçamento":brl(i.preco*i.qtd)}`);
@@ -553,8 +566,8 @@ function atualizaEnvio(){
 function renderBarra(){
   const c = contas();
   $("#barra").classList.toggle("on", c.n>0);
-  $("#barra-total").textContent = brl(c.sub) + (c.combinar?" +":"");
-  $("#barra-qtd").textContent = `${c.n} ${c.n===1?"peça":"peças"} na sacola`;
+  $("#barra-total").textContent = CATALOGO ? `${c.n} ${c.n===1?"peça":"peças"}` : brl(c.sub) + (c.combinar?" +":"");
+  $("#barra-qtd").textContent = CATALOGO ? "na sua lista" : `${c.n} ${c.n===1?"peça":"peças"} na sacola`;
 }
 function renderTudo(){ renderGrade(); renderBarra(); if($("#sacola").open) renderSacola(); }
 
@@ -589,6 +602,14 @@ document.addEventListener("input", e=>{
 document.querySelectorAll("dialog").forEach(d=>d.addEventListener("click",e=>{ if(e.target===d) d.close(); }));
 $("#nome").value = guarda.ler("am-nome","");
 
+if(CATALOGO){
+  document.body.classList.add("catalogo");
+  $(".capa h1").innerHTML = "Escolha as peças e fale com a gente no <span>WhatsApp</span>";
+  $(".capa p").textContent = "Toque nas peças para ver os detalhes e monte sua lista. Preço, prazo e entrega a gente passa pela conversa.";
+  $("#sacola-titulo").textContent = "Sua lista";
+  $("#abrir-sacola").textContent = "Ver lista";
+  $("#enviar").textContent = "Enviar lista no WhatsApp";
+}
 renderCats(); renderTudo();
 </script>
 </body>
