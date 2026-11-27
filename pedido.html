@@ -183,18 +183,18 @@ const PRODUTOS = {
   ],
   quadros:[
     C("bruxa","Quadro","As más vão para onde querem",35,{estoque:1,pronta:true}),
-    C("caderno","Quadro","Caderno rosa",25,{estoque:1,pronta:true}),
+    C("caderno","Quadro","",25,{estoque:1,pronta:true,desc:"caderno rosa"}),
     C("memoria-afetiva","Quadro","Quadro da memória afetiva",25,{estoque:1,pronta:true}),
     C("saudade","Quadro","Oi, saudade",35,{estoque:1,pronta:true}),
     C("chinelo","Quadro","Menos dress code, mais chinelo nopé",25,{estoque:1,pronta:true}),
     C("nossa-senhora","Quadro","Eu não sou santa, mas sei que a santa me adora",25,{estoque:1,pronta:true}),
-    C("bar","Quadro","Barraca de praia",50,{estoque:1,pronta:true}),
+    C("bar","Quadro","",50,{estoque:1,pronta:true,desc:"barraca de praia"}),
     C("baralho-quadro","Quadro","No meu baralho não há rei maior que a dama",46,{estoque:1,pronta:true}),
     C("tabuleiro","Quadro","No meu tabuleiro a rainha ganha o jogo",38,{estoque:1,pronta:true}),
     C("mulher-oculos","Quadro","Imagina o que as mulheres produziriam se também tivessem uma esposa em casa",35,{estoque:1,pronta:true}),
     C("todo-mal","Quadro","Todo mal que colidir contra mim regridirá",40,{estoque:1,pronta:true}),
     C("energias","Quadro","Energias negativas não combinam com meus looks",40,{estoque:1,pronta:true}),
-    C("venus","Quadro","Vênus",50,{estoque:1,pronta:true}),
+    C("venus","Quadro","",50,{estoque:1,pronta:true,desc:"Vênus"}),
     C("ampulheta","Quadro","Tem papo que não vale o tic-tac do relógio",40,{estoque:1,pronta:true}),
     C("porta-joia","Quadro","Porta-joia",40,{estoque:1,pronta:true}),
     C("estrela-quadro","Quadro","Há de surgir uma estrela no céu cada vez que você sorrir",40,{estoque:1,pronta:true}),
@@ -228,7 +228,7 @@ function addItem(it){
 function qtdNoPedido(id){ return pedido.filter(p=>p.prodId===id).reduce((s,p)=>s+p.qtd,0); }
 
 function cardProduto(p){
-  const foto = IMG[p.id] ? `<img alt="${esc(p.tipo+' '+p.nome)}" src="${IMG[p.id]}" id="img-${p.id}">` : "";
+  const foto = IMG[p.id] ? `<img alt="${esc(p.tipo+' '+(p.nome||p.desc||''))}" src="${IMG[p.id]}" id="img-${p.id}">` : "";
   const resta = p.estoque ? p.estoque - qtdNoPedido(p.id) : null;
   const est = p.estoque ? `<span class="estoque">${resta>0?`Restam ${resta}`:"Esgotado"}</span>` : "";
   let opts = "";
@@ -236,7 +236,7 @@ function cardProduto(p){
   if(p.cores) opts = `<div class="opcoes"><select id="cor-${p.id}" aria-label="Cor">${p.cores.map(c=>`<option>${c}</option>`).join("")}</select></div>`;
   return `<article class="peca"><div class="foto">${foto}${est}</div><div class="corpo">
     <span class="tipo">${esc(p.tipo)}${p.pronta?" · pronta entrega":""}</span>
-    <h3 class="nome">${esc(p.nome)}</h3>${opts}
+    ${p.nome?`<h3 class="nome">${esc(p.nome)}</h3>`:""}${opts}
     <div class="linha-preco"><span class="preco">${brl(p.preco)}</span>
     <button class="add" data-add="${p.id}" ${resta!==null&&resta<=0?"disabled":""}>Adicionar</button></div></div></article>`;
 }
@@ -305,7 +305,7 @@ document.addEventListener("click",e=>{
     if(p.camiseta){ const cor=$("#cor-"+p.id).value, tam=$("#tam-"+p.id).value; detalhe=`${cor}, ${tam}`; chave+=`|${cor}|${tam}`; }
     if(p.cores){ const cor=$("#cor-"+p.id).value; detalhe=cor; chave+="|"+cor; }
     const max = p.estoque ? p.estoque - qtdNoPedido(p.id) + (pedido.find(x=>x.chave===chave)?.qtd||0) : 0;
-    addItem({chave,prodId:p.id,nome:p.nome,tipo:p.tipo,detalhe,preco:p.preco,max:p.estoque?max:0,pronta:!!p.pronta});
+    addItem({chave,prodId:p.id,nome:p.nome||p.desc,tipo:p.tipo,detalhe,preco:p.preco,max:p.estoque?max:0,pronta:!!p.pronta});
   }
   if(t.dataset.enc){
     const en=ENCOMENDA.find(x=>x.id===t.dataset.enc);
