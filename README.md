@@ -32,3 +32,13 @@ O site é uma página estática (`index.html` + pasta `img/`), sem banco de dado
 - Frete e itens "a combinar" ficam fora do valor do Pix e são acertados no WhatsApp.
 - O QR Code usa `js/qrcode.js` (biblioteca qrcode-generator, licença MIT), incluída no repositório.
 - A lista de produtos hoje está repetida em `index.html`, `pedido.html` e `loja.html`: ao cadastrar um produto, atualize as três.
+
+## Modo do site (catálogo, vitrine ou loja)
+
+No começo do `<script>` de `index.html`, `loja.html` e `pedido.html` há uma linha `const MODO = "catalogo";`. Troque a palavra nos **três** arquivos:
+
+| Modo | Preços | Pix | Envio para outra cidade | Quando usar |
+|---|---|---|---|---|
+| `catalogo` | ocultos | não | sim (frete a combinar) | enquanto a loja não pode vender com nota (modo atual) |
+| `vitrine` | visíveis | não | não, só retirada ou entrega em Fortaleza | se a contabilidade confirmar que venda local sem nota é permitida |
+| `loja` | visíveis | sim | sim | com o certificado A1 ativo e emitindo NF-e |

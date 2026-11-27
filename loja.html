@@ -149,6 +149,8 @@ footer{margin-top:40px;padding:20px 0;border-top:2px dashed var(--linha);color:v
 footer a{color:var(--indigo)}
 /* Modo catálogo: sem preços, sem Pix */
 body.catalogo .totais,body.catalogo #grupo-pag,body.catalogo #pix-area,body.catalogo .selo.pix{display:none!important}
+/* Modo vitrine: com preços, sem Pix e sem envio para outra cidade */
+body.vitrine #grupo-pag,body.vitrine #pix-area,body.vitrine .selo.pix,body.vitrine .so-loja{display:none!important}
 </style>
 </head>
 <body>
@@ -195,7 +197,7 @@ body.catalogo .totais,body.catalogo #grupo-pag,body.catalogo #pix-area,body.cata
       <div class="entregas">
         <label><input type="radio" name="entrega" value="Retirada combinada" checked> Retirar (combinamos o local)</label>
         <label><input type="radio" name="entrega" value="Entrega em Fortaleza"> Entrega em Fortaleza (frete a combinar)</label>
-        <label><input type="radio" name="entrega" value="Envio pelos Correios"> Envio para outra cidade (frete a combinar)</label>
+        <label class="so-loja"><input type="radio" name="entrega" value="Envio pelos Correios"> Envio para outra cidade (frete a combinar)</label>
       </div>
     </div>
     <div class="grupo"><label for="obs">Observações</label><textarea id="obs" rows="2" placeholder="Data especial, presente, dúvida..."></textarea></div>
@@ -232,9 +234,14 @@ const PIX = {
 };
 const PIX_DESCONTO = 0;   // ex.: 0.05 = 5% de desconto no Pix. 0 = sem desconto.
 const PRAZO = "Pronto em até 3 dias úteis após a confirmação";
-/* MODO CATÁLOGO: true = esconde preços e Pix; a cliente monta uma lista e manda no WhatsApp.
-   Troque para false quando a loja puder vender com nota fiscal (certificado A1 ativo). */
-const CATALOGO = true;
+/* MODO DO SITE (mude só a palavra entre aspas):
+   "catalogo" = sem preços e sem Pix: a cliente manda a lista no WhatsApp e pergunta o preço (modo atual);
+   "vitrine"  = com preços, sem Pix e sem envio para outra cidade: pedido e pagamento combinados no WhatsApp,
+                só retirada ou entrega em Fortaleza. Ligar só depois que a contabilidade confirmar que pode;
+   "loja"     = completo, com Pix e envio pelos Correios (quando o certificado A1 estiver ativo). */
+const MODO = "catalogo";
+const CATALOGO = MODO === "catalogo";
+const VITRINE = MODO === "vitrine";
 const SAC = CATALOGO ? "lista" : "sacola";
 const CORES_CAMISETA = ["Branca","Preta","Vermelha","Amarela"];
 const TAMANHOS = ["PP","P","M","G","GG"];
@@ -609,6 +616,12 @@ if(CATALOGO){
   $("#sacola-titulo").textContent = "Sua lista";
   $("#abrir-sacola").textContent = "Ver lista";
   $("#enviar").textContent = "Enviar lista no WhatsApp";
+}
+if(VITRINE){
+  document.body.classList.add("vitrine");
+  document.querySelector('input[name="pag"][value="combinar"]').checked = true;
+  $(".capa h1").innerHTML = "Escolha as peças e peça pelo <span>WhatsApp</span>";
+  $(".capa p").textContent = "Toque nas peças para ver os detalhes e monte sua sacola. O pagamento e a entrega em Fortaleza a gente combina pela conversa.";
 }
 renderCats(); renderTudo();
 </script>
