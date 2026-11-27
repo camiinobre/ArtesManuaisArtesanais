@@ -89,6 +89,9 @@ def main():
             if vitrine[pid] is not None and vitrine[pid] != simulador[pid]:
                 problemas.append(f"{pid}: preço {vitrine[pid]:g} em index.html e {simulador[pid]:g} em pedido.html")
 
+    if vitrine and sacola:
+        for pid in sorted(set(vitrine) - fotos_loja):
+            problemas.append(f"{pid}: está em index.html e falta em PRODUTOS de loja.html")
     for pid in sorted(sacola):
         if vitrine and pid not in vitrine:
             problemas.append(f"{pid}: está em loja.html e falta na lista de index.html")

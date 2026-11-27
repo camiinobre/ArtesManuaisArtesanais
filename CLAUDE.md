@@ -16,14 +16,14 @@ python3 -m http.server 8765
 
 - `index.html`: vitrine. As listas `canecas`, `camisetas`, `quadros`, `bottons`, `imas` e `natal` ficam no fim do `<script>`, no formato `['arquivo','Nome','Tipo',preco,'descricao']`.
 - `pedido.html`: simulador de orçamento. `PRODUTOS` e `ENCOMENDA` ficam no começo do `<script>`, no formato `C("arquivo","Tipo","Nome",preco,{...})`. É a única página com tema escuro.
-- `loja.html`: vitrine com sacola e Pix. `PIX`, `PRODUTOS` e `CATS` ficam no começo do `<script>`, no formato `P("arquivo","categoria","Tipo","Nome",preco,{...})`. Hoje só tem canecas, camisetas e sob encomenda.
+- `loja.html`: vitrine com sacola e Pix. `PIX`, `PRODUTOS` e `CATS` ficam no começo do `<script>`, no formato `P("arquivo","categoria","Tipo","Nome",preco,{...})`. Tem todas as categorias da vitrine, com `estoque` e `pronta` nas peças únicas.
 - `calculadora.html`: calculadora interna de preços. Guarda o estado no `localStorage` do aparelho.
 
 ## Produto novo
 
 1. Coloque duas fotos em `img/`, em retrato 4:5: `nome.webp` com 900 px de largura e `nome-sm.webp` com 480 px.
-2. Acrescente o produto na lista de `index.html` **e** em `PRODUTOS` de `pedido.html`. Em `loja.html` também, se a categoria já estiver lá.
-3. Variação de cor não é produto novo no simulador: entra em `fotoCor` do produto principal (ver `estrela-marrom` e `nordeste-preta`), mas tem linha própria em `index.html`.
+2. Acrescente o produto nos três lugares: a lista de `index.html`, `PRODUTOS` de `pedido.html` e `PRODUTOS` de `loja.html`.
+3. Variação de cor não é produto novo no simulador nem na loja: entra em `fotoCor` do produto principal (ver `estrela-marrom` e `nordeste-preta`), mas tem linha própria em `index.html`.
 4. O preço precisa ser o mesmo nas páginas em que aparece.
 
 O hook `.claude/hooks/confere-produtos.py` roda depois de cada edição nessas páginas ou em `img/` e acusa produto faltando, foto faltando e preço diferente. Para rodar à mão:
