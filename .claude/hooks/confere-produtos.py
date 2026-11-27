@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Confere se as listas de produtos das páginas batem entre si e com as fotos.
+"""Confere se as listas de produtos das páginas batem entre si e com as fotos,
+e se o MODO do site é o mesmo nas três páginas.
 
 Roda sozinho depois que o Claude edita index.html, pedido.html, loja.html ou algo
 em img/ (ver .claude/settings.json). Também dá para rodar à mão:
@@ -15,6 +16,7 @@ import sys
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 PAGINAS = {"index.html", "pedido.html", "loja.html"}
+MODOS = ("catalogo", "vitrine", "loja")
 
 
 def veio_de_edicao_irrelevante():
@@ -53,6 +55,21 @@ def main():
 
     index, pedido, loja = ler("index.html"), ler("pedido.html"), ler("loja.html")
     problemas = []
+
+    # MODO do site: a mesma palavra nas três páginas (ver README, "Modo do site").
+    modos = {}
+    for nome, texto in (("index.html", index), ("pedido.html", pedido), ("loja.html", loja)):
+        if not texto:
+            continue
+        achados = re.findall(r'^const MODO\s*=\s*["\']([^"\']*)["\']', texto, re.M)
+        if len(achados) != 1:
+            problemas.append(f"{nome}: esperava uma linha const MODO = \"...\"; achei {len(achados)}")
+        elif achados[0] not in MODOS:
+            problemas.append(f"{nome}: MODO \"{achados[0]}\" não existe; use {', '.join(MODOS)}")
+        else:
+            modos[nome] = achados[0]
+    if len(set(modos.values())) > 1:
+        problemas.append("MODO diferente entre as páginas: " + ", ".join(f"{n} = {m}" for n, m in modos.items()))
 
     # index.html: ['arquivo','Nome','Tipo',preco,'descricao']
     vitrine = {}
@@ -104,10 +121,10 @@ def main():
                 problemas.append(f"img/{arquivo}: foto não existe")
 
     if problemas:
-        print("Listas de produtos fora de sincronia:", file=sys.stderr)
+        print("Páginas fora de sincronia:", file=sys.stderr)
         for p in problemas:
             print(f"  - {p}", file=sys.stderr)
-        print("Corrija antes de terminar (ver CLAUDE.md, seção Produto novo).", file=sys.stderr)
+        print("Corrija antes de terminar (ver CLAUDE.md, seções Produto novo e Modo do site).", file=sys.stderr)
         return 2
     return 0
 

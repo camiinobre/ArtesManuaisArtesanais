@@ -19,6 +19,18 @@ python3 -m http.server 8765
 - `loja.html`: vitrine com sacola e Pix. `PIX`, `PRODUTOS` e `CATS` ficam no começo do `<script>`, no formato `P("arquivo","categoria","Tipo","Nome",preco,{...})`. Tem todas as categorias da vitrine, com `estoque` e `pronta` nas peças únicas.
 - `calculadora.html`: calculadora interna de preços. Guarda o estado no `localStorage` do aparelho.
 
+## Modo do site
+
+`index.html`, `pedido.html` e `loja.html` têm, no começo do `<script>`, a linha `const MODO = "catalogo";`. A palavra precisa ser a mesma nas três páginas.
+
+| Modo | Preços | Pix | Envio para outra cidade |
+| --- | --- | --- | --- |
+| `catalogo` | ocultos | não | sim, frete a combinar |
+| `vitrine` | visíveis | não | não, só retirada ou entrega em Fortaleza |
+| `loja` | visíveis | sim | sim |
+
+O modo depende da situação fiscal da loja (nota fiscal, certificado A1), descrita no `README.md`. Não troque o `MODO` por conta própria: só quando o pedido disser qual modo usar, e sempre nas três páginas no mesmo commit. Ao mexer em preço, Pix ou entrega, confira o resultado nos três modos, porque cada um esconde partes diferentes da página.
+
 ## Produto novo
 
 1. Coloque duas fotos em `img/`, em retrato 4:5: `nome.webp` com 900 px de largura e `nome-sm.webp` com 480 px.
@@ -28,7 +40,7 @@ python3 -m http.server 8765
 
 O skill `/novo-produto` faz esse passo a passo, e `.claude/skills/novo-produto/fotos.py` gera as duas fotos a partir da original.
 
-O hook `.claude/hooks/confere-produtos.py` roda depois de cada edição nessas páginas ou em `img/` e acusa produto faltando, foto faltando e preço diferente. Para rodar à mão:
+O hook `.claude/hooks/confere-produtos.py` roda depois de cada edição nessas páginas ou em `img/` e acusa produto faltando, foto faltando, preço diferente e `MODO` diferente entre as páginas. Para rodar à mão:
 
 ```bash
 python3 .claude/hooks/confere-produtos.py
