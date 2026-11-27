@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Loja | Artes Manuais Artesanais</title>
+<meta name="description" content="Escolha canecas, copos e camisetas feitos à mão, monte sua sacola, pague com Pix e envie o pedido pelo WhatsApp.">
+<meta property="og:title" content="Loja | Artes Manuais Artesanais">
+<meta property="og:description" content="Escolha as peças, pague com Pix e mande o pedido pronto no WhatsApp.">
+<meta property="og:image" content="https://camiinobre.github.io/ArtesManuaisArtesanais/img/og.png">
+<link rel="icon" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Caveat:wght@600&family=Nunito:wght@400;600;800&display=swap">
+<style>
+:root{
+  --papel:#FBF5E8; --cartao:#FFFDF7; --tinta:#1D0A6E; --indigo:#2A0BA8; --girassol:#FCD71A;
+  --hibisco:#7120BA; --aquarela:#AED4F3; --linha:#E6DCC6; --suave:#5B5280; --ok:#1E7A4C; --pix:#1E7A4C;
+  --sombra:0 1px 0 rgba(29,10,110,.06),0 8px 24px -12px rgba(29,10,110,.25);
+  --f-tit:"Baloo 2",ui-rounded,"Arial Rounded MT Bold",system-ui,sans-serif;
+  --f-txt:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mao:"Caveat","Segoe Print","Bradley Hand",cursive;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --papel:#140A33; --cartao:#1E1247; --tinta:#F6EFE0; --indigo:#B9A8FF; --girassol:#FCD71A;
+  --hibisco:#D6A6FF; --aquarela:#2E3D73; --linha:#352763; --suave:#B7AED6; --ok:#6FD3A0; --pix:#6FD3A0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --papel:#140A33; --cartao:#1E1247; --tinta:#F6EFE0; --indigo:#B9A8FF; --girassol:#FCD71A;
+  --hibisco:#D6A6FF; --aquarela:#2E3D73; --linha:#352763; --suave:#B7AED6; --ok:#6FD3A0; --pix:#6FD3A0; color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--papel);color:var(--tinta);font-family:var(--f-txt);font-size:15px;line-height:1.5;padding-bottom:96px}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--girassol);outline-offset:2px}
+.wrap{width:min(1120px,100% - 32px);margin-inline:auto}
+
+/* Topo */
+.topo{background:linear-gradient(90deg,#2A0BA8 0%,#7120BA 100%);color:#fff}
+.topo .wrap{display:flex;align-items:center;gap:12px;min-height:56px}
+.topo a{color:#fff;text-decoration:none;font-weight:800;font-size:14px}
+.topo .marca{display:flex;align-items:center;gap:10px;margin-right:auto;font-family:var(--f-tit);font-size:18px;color:#FCD71A}
+.topo .marca img{width:34px;height:34px;border-radius:50%;background:#fff}
+.capa{padding:22px 0 8px}
+.capa h1{font-family:var(--f-tit);font-weight:800;font-size:clamp(28px,6vw,42px);line-height:1.05;margin:0;text-wrap:balance}
+.capa h1 span{text-decoration:underline;text-decoration-color:var(--girassol);text-decoration-thickness:.16em;text-underline-offset:.1em}
+.capa p{margin:6px 0 0;color:var(--suave);max-width:56ch}
+.selos{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.selo{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:5px 9px;border-radius:999px;border:1.5px solid var(--indigo);color:var(--indigo)}
+.selo.pix{border-color:var(--pix);color:var(--pix)}
+
+/* Categorias */
+.cats{position:sticky;top:0;z-index:4;background:var(--papel);padding:12px 0 10px;border-bottom:2px dashed var(--linha);margin-bottom:16px}
+.cats .wrap{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.cats .wrap::-webkit-scrollbar{display:none}
+.cat{flex:none;display:flex;align-items:center;gap:6px;font-weight:800;font-size:14px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--linha);background:var(--cartao);cursor:pointer}
+.cat[aria-pressed="true"]{background:var(--indigo);border-color:var(--indigo);color:var(--papel)}
+.cat svg{width:16px;height:16px}
+
+/* Grade de produtos */
+.grade{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+@media (min-width:700px){.grade{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}}
+.peca{background:var(--cartao);border:1px solid var(--linha);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.peca .abrir{all:unset;cursor:pointer;display:block;position:relative}
+.peca .abrir:focus-visible{outline:3px solid var(--girassol);outline-offset:-3px}
+.foto{aspect-ratio:4/5;background:var(--aquarela);width:100%;height:auto;object-fit:cover}
+.sem-foto{aspect-ratio:4/5;background:var(--aquarela);display:grid;place-items:center;padding:16px;text-align:center;font-family:var(--f-mao);font-size:24px;line-height:1.1;color:#1D0A6E}
+.etq{position:absolute;left:8px;top:8px;background:var(--girassol);color:#1D0A6E;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px}
+.corpo{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
+.tipo{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--hibisco)}
+.nome{font-family:var(--f-tit);font-weight:600;font-size:16px;line-height:1.15;margin:0;text-wrap:balance}
+.preco{font-weight:800;font-size:17px;font-variant-numeric:tabular-nums;margin-top:auto;padding-top:4px}
+.preco.combinar{font-family:var(--f-mao);font-size:20px;font-weight:600;color:var(--suave)}
+.preco-pix{font-size:12px;font-weight:800;color:var(--pix)}
+.add{margin-top:8px;font-weight:800;border:0;border-radius:10px;padding:9px 10px;background:var(--girassol);color:#1D0A6E;cursor:pointer;width:100%}
+.add:disabled{opacity:.45;cursor:not-allowed}
+.vazio-cat{color:var(--suave);font-family:var(--f-mao);font-size:22px;text-align:center;padding:40px 0}
+
+/* Barra da sacola */
+.barra{position:fixed;left:0;right:0;bottom:0;z-index:6;background:#2A0BA8;color:#fff;
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  display:flex;align-items:center;justify-content:space-between;gap:12px;transform:translateY(110%);transition:transform .2s}
+.barra.on{transform:none}
+.barra b{font-family:var(--f-tit);font-size:18px;display:block;line-height:1.1}
+.barra small{opacity:.85}
+.barra button{border:0;border-radius:12px;background:#FCD71A;color:#1D0A6E;font-weight:800;font-size:15px;padding:12px 16px;cursor:pointer;white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.barra{transition:none}}
+
+/* Folhas (dialog) */
+dialog.folha{border:0;padding:0;background:var(--cartao);color:var(--tinta);width:min(560px,100%);max-height:92dvh;border-radius:18px;box-shadow:var(--sombra)}
+dialog.folha::backdrop{background:rgba(20,10,51,.55)}
+@media (max-width:640px){dialog.folha{margin:auto 0 0;max-width:100%;border-radius:18px 18px 0 0}}
+.folha .cab{position:sticky;top:0;z-index:2;background:var(--cartao);display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 16px 10px;border-bottom:2px dashed var(--linha)}
+.folha .cab h2{font-family:var(--f-tit);font-size:21px;margin:0;line-height:1.1}
+.fechar{border:0;background:transparent;font-size:28px;line-height:1;cursor:pointer;padding:2px 8px;border-radius:8px}
+.folha .conteudo{padding:14px 16px 20px;display:flex;flex-direction:column;gap:14px}
+.det-foto{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:12px;background:var(--aquarela);max-height:52dvh}
+.det-txt{color:var(--suave);margin:0}
+.grupo{display:flex;flex-direction:column;gap:6px}
+.legenda,.grupo>label{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--suave)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{cursor:pointer}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips span{display:inline-block;min-width:44px;text-align:center;padding:8px 12px;border-radius:10px;border:1.5px solid var(--linha);font-weight:800}
+.chips input:checked+span{background:var(--indigo);border-color:var(--indigo);color:var(--papel)}
+.chips input:focus-visible+span{outline:3px solid var(--girassol);outline-offset:2px}
+input[type=text],textarea{font:inherit;font-size:16px;color:var(--tinta);background:var(--papel);border:1.5px solid var(--linha);border-radius:10px;padding:9px 10px;width:100%}
+.qtd{display:flex;align-items:center;gap:6px}
+.qtd button{width:34px;height:34px;border-radius:9px;border:1.5px solid var(--linha);background:transparent;font-weight:800;font-size:18px;cursor:pointer;line-height:1}
+.qtd button:disabled{opacity:.35;cursor:not-allowed}
+.qtd output{min-width:24px;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+.linha-add{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.principal{border:0;border-radius:12px;padding:13px 16px;font-weight:800;font-size:16px;cursor:pointer;background:var(--indigo);color:var(--papel);text-align:center;text-decoration:none;display:block}
+.principal.amarelo{background:#FCD71A;color:#1D0A6E}
+.principal.wpp{background:#1f8f4e;color:#fff}
+.principal[aria-disabled="true"]{opacity:.4;pointer-events:none}
+.secundario{border:0;background:transparent;color:var(--indigo);text-decoration:underline;font-weight:700;cursor:pointer;padding:4px}
+
+/* Sacola */
+.itens{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.item{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:4px 10px;align-items:start}
+.item img,.item .mini{width:52px;height:64px;border-radius:8px;object-fit:cover;background:var(--aquarela);grid-row:span 2}
+.item b{font-size:14px;line-height:1.25}
+.item small{color:var(--suave);display:block}
+.item .val{font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
+.item .qtd{grid-column:3;justify-self:end}
+.item .qtd button{width:28px;height:28px;font-size:16px}
+.entregas{display:flex;flex-direction:column;gap:8px}
+.entregas label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+.entregas input{accent-color:var(--indigo);margin-top:4px}
+.totais{border-top:2px dashed var(--linha);padding-top:10px;display:flex;flex-direction:column;gap:2px}
+.totais .l{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+.totais .grande{font-family:var(--f-tit);font-weight:800;font-size:24px}
+.nota{font-size:13px;color:var(--suave);margin:0}
+.prazo{font-family:var(--f-mao);font-size:20px;color:var(--hibisco);line-height:1.1}
+.pix-caixa{border:2px solid var(--pix);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
+.pix-caixa h3{margin:0;font-family:var(--f-tit);font-size:19px;color:var(--pix)}
+.pix-valor{font-family:var(--f-tit);font-weight:800;font-size:28px;line-height:1}
+.qr{background:#fff;padding:10px;border-radius:10px;width:210px;max-width:100%}
+.qr svg{display:block;width:100%;height:auto}
+.copia{width:100%;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;word-break:break-all;background:var(--papel);border:1.5px dashed var(--linha);border-radius:10px;padding:8px;max-height:72px;overflow:auto;text-align:left;user-select:all}
+.recebedor{font-size:13px;color:var(--suave);margin:0}
+.recebedor b{color:var(--tinta)}
+.passos{margin:0;padding-left:20px;text-align:left;font-size:14px}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:20;background:var(--tinta);color:var(--papel);
+  padding:10px 14px;border-radius:10px;font-weight:700;font-size:14px;max-width:calc(100% - 32px);text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+footer{margin-top:40px;padding:20px 0;border-top:2px dashed var(--linha);color:var(--suave);font-size:13px;text-align:center}
+footer a{color:var(--indigo)}
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="./"><img src="img/logo.webp" alt="" width="34" height="34">Artes Manuais</a>
+    <a href="./#medidas">Medidas</a>
+  </div>
+</header>
+
+<section class="capa wrap">
+  <h1>Escolha, pague no <span>Pix</span> e mande no WhatsApp</h1>
+  <p>Toque nas peças para ver os detalhes, monte sua sacola e envie o pedido pronto. Frete e encomendas especiais a gente acerta pela conversa.</p>
+  <div class="selos"><span class="selo">Fortaleza · CE</span><span class="selo">Feito à mão</span><span class="selo pix">Pix na hora</span></div>
+</section>
+
+<nav class="cats" aria-label="Categorias"><div class="wrap" id="cats"></div></nav>
+
+<main class="wrap">
+  <ul class="grade" id="grade"></ul>
+</main>
+
+<footer class="wrap">
+  WhatsApp <a href="https://wa.me/5585982197478">(85) 9 8219-7478</a> · Instagram <a href="https://instagram.com/artesmanuaisartesanais">@artesmanuaisartesanais</a> · <a href="https://br.shp.ee/ntZ4soXP">Shopee</a>
+</footer>
+
+<div class="barra" id="barra" aria-live="polite">
+  <div><b id="barra-total">R$ 0,00</b><small id="barra-qtd">0 peças</small></div>
+  <button type="button" id="abrir-sacola">Ver sacola</button>
+</div>
+
+<dialog class="folha" id="det" aria-labelledby="det-titulo">
+  <div class="cab"><h2 id="det-titulo"></h2><button class="fechar" type="button" data-fechar aria-label="Fechar">×</button></div>
+  <div class="conteudo" id="det-corpo"></div>
+</dialog>
+
+<dialog class="folha" id="sacola" aria-labelledby="sacola-titulo">
+  <div class="cab"><h2 id="sacola-titulo">Sua sacola</h2><button class="fechar" type="button" data-fechar aria-label="Fechar">×</button></div>
+  <div class="conteudo">
+    <ul class="itens" id="itens"></ul>
+    <div class="grupo"><label for="nome">Seu nome</label><input type="text" id="nome" autocomplete="name" placeholder="Como podemos te chamar?"></div>
+    <div class="grupo"><span class="legenda">Como receber</span>
+      <div class="entregas">
+        <label><input type="radio" name="entrega" value="Retirada combinada" checked> Retirar (combinamos o local)</label>
+        <label><input type="radio" name="entrega" value="Entrega em Fortaleza"> Entrega em Fortaleza (frete a combinar)</label>
+        <label><input type="radio" name="entrega" value="Envio pelos Correios"> Envio para outra cidade (frete a combinar)</label>
+      </div>
+    </div>
+    <div class="grupo"><label for="obs">Observações</label><textarea id="obs" rows="2" placeholder="Data especial, presente, dúvida..."></textarea></div>
+    <div class="totais">
+      <div class="l"><span>Peças</span><span id="t-sub">R$ 0,00</span></div>
+      <div class="l"><span>Frete</span><span id="t-frete">sem frete</span></div>
+      <div class="l grande"><span>Total</span><span id="t-total">R$ 0,00</span></div>
+      <div class="prazo" id="t-prazo"></div>
+    </div>
+    <div class="grupo"><span class="legenda">Pagamento</span>
+      <div class="entregas">
+        <label><input type="radio" name="pag" value="pix" checked> Pix agora (copia e cola ou QR Code)</label>
+        <label><input type="radio" name="pag" value="combinar"> Combinar no WhatsApp</label>
+      </div>
+    </div>
+    <div id="pix-area"></div>
+    <a class="principal wpp" id="enviar" href="#" target="_blank" rel="noopener" aria-disabled="true">Enviar pedido no WhatsApp</a>
+    <p class="nota" style="text-align:center">O pedido só é confirmado depois que a gente responder no WhatsApp.</p>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="js/qrcode.js"></script>
+<script>
+/* ======================= CONFIGURAÇÃO =======================
+   Preços, fotos e opções ficam aqui. Ao cadastrar um produto novo,
+   acrescente uma linha em PRODUTOS (a foto vai em img/nome-sm.webp). */
+const WHATS = "5585982197478";
+const PIX = {
+  chave: "69859281000139",              // CNPJ só com números
+  nome: "Auryjania Parente Cavalcante",  // aparece para a cliente
+  cidade: "Fortaleza",
+};
+const PIX_DESCONTO = 0;   // ex.: 0.05 = 5% de desconto no Pix. 0 = sem desconto.
+const PRAZO = "Pronto em até 3 dias úteis após a confirmação";
+const CORES_CAMISETA = ["Branca","Preta","Vermelha","Amarela"];
+const TAMANHOS = ["PP","P","M","G","GG"];
+
+const CATS = [
+  {id:"todos",nome:"Todos"},
+  {id:"canecas",nome:"Canecas"},
+  {id:"copos",nome:"Copos"},
+  {id:"camisetas",nome:"Camisetas"},
+  {id:"encomenda",nome:"Sob encomenda"},
+];
+const P = (id,cat,tipo,nome,preco,extra={}) => ({id,cat,tipo,nome,preco,foto:id,...extra});
+const PRODUTOS = [
+  P("latina-demais","canecas","Caneca","Latina demais para ser minimalista",30),
+  P("coragem-de-desagradar","canecas","Caneca","Tenha a coragem de desagradar",30),
+  P("praticar-a-rebeldia","canecas","Caneca","Praticar a rebeldia de não ser perfeita",30),
+  P("rainha","canecas","Caneca","No meu tabuleiro, rainha",30),
+  P("tardezinha","canecas","Caneca","De tarde não, de tardezinha",30),
+  P("baralho","canecas","Caneca","No meu baralho não há rei maior que a dama",30),
+  P("deixa-digam","canecas","Caneca","Deixa digam, pensem, falem",30),
+  P("corazon-partio","canecas","Caneca","Tiritas pra esse corazón partío",30),
+  P("onca","canecas","Caneca","Calma, sou onça",30),
+  P("desobediencia","canecas","Caneca","Nunca reverência, sempre desobediência",30),
+  P("nao-vale-a-pena","canecas","Caneca","Não vale a pena trazer esse teu amor de volta",30),
+  P("jesus","canecas","Caneca","Sagrado Coração",30),
+  P("estrela-marrom","canecas","Caneca","Há de surgir uma estrela",30,{cores:["Marrom","Amarela"],fotoCor:{Marrom:"estrela-marrom",Amarela:"estrela-amarela"}}),
+  P("exu-na-defesa","copos","Copo de vidro","Exu na defesa, eu mesma no ataque",20,{estoque:2,pronta:true}),
+  P("nao-me-comove","copos","Copo americano","Não me comove o pranto de quem é ruim",12,{estoque:5,pronta:true}),
+  P("nordeste-preta","camisetas","Camiseta","O Nordeste faz tudo",30,{cores:CORES_CAMISETA,tamanhos:TAMANHOS,fotoCor:{Preta:"nordeste-preta",Branca:"nordeste-branca"}}),
+  P("bruxas","camisetas","Camiseta","Bruxas não se curvam ao fascismo",30,{cores:CORES_CAMISETA,tamanhos:TAMANHOS}),
+  P("estrela-que-brilha","camisetas","Camiseta","A estrela que brilha",30,{cores:CORES_CAMISETA,tamanhos:TAMANHOS}),
+  P("sua-arte","encomenda","Personalizado","Sua arte, sua frase",30,{foto:null,texto:"Mande a frase ou o desenho e a gente transforma na peça.",bases:[["Caneca",30],["Camiseta",30],["Copo americano",12]]}),
+  P("ceramica","encomenda","Sob encomenda","Cerâmica fria",0,{foto:"ceramica-feliz-natal",combinar:true,texto:"Peças modeladas à mão, com edição especial de Natal."}),
+  P("imas","encomenda","Sob encomenda","Ímãs de geladeira",0,{foto:null,combinar:true,texto:"Com arte da casa ou a sua foto, para lembrança, festa e brinde."}),
+  P("adesivos","encomenda","Sob encomenda","Adesivos e recortes",0,{foto:null,combinar:true,texto:"Adesivos e etiquetas recortados na medida, para embalagem ou lembrancinha."}),
+  P("lula","encomenda","Sob encomenda","Estampas Lula e Brasil 13",0,{foto:null,combinar:true,texto:"Lula Lá, Brasil 13 e outras artes em camiseta e caneca."}),
+];
+
+/* ======================= UTILIDADES ======================= */
+const $ = s => document.querySelector(s);
+const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fotoSm = f => f ? `img/${f}-sm.webp` : null;
+const fotoGr = f => f ? `img/${f}.webp` : null;
+const byId = id => PRODUTOS.find(p=>p.id===id);
+const guarda = {
+  ler(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch{ return d; } },
+  pôr(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} },
+};
+let tt; function toast(t){ const e=$("#toast"); e.textContent=t; e.classList.add("on"); clearTimeout(tt); tt=setTimeout(()=>e.classList.remove("on"),2400); }
+async function copiar(txt,ok){
+  try{ await navigator.clipboard.writeText(txt); toast(ok); }
+  catch{ const ta=document.createElement("textarea"); ta.value=txt; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); toast(ok); }catch{ toast("Não consegui copiar. Segure o texto para copiar."); } ta.remove(); }
+}
+
+/* ======================= PIX (BR Code estático, padrão do Banco Central) ======================= */
+const semAcento = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9 ]/g,"").toUpperCase().trim();
+const tlv = (id,v) => id + String(v.length).padStart(2,"0") + v;
+function crc16(str){
+  let crc = 0xFFFF;
+  for(let i=0;i<str.length;i++){
+    crc ^= str.charCodeAt(i) << 8;
+    for(let b=0;b<8;b++) crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) & 0xFFFF : (crc << 1) & 0xFFFF;
+  }
+  return crc.toString(16).toUpperCase().padStart(4,"0");
+}
+function nomePix(n){ // campo 59 aceita até 25 caracteres
+  let s = semAcento(n); if(s.length<=25) return s;
+  const p = s.split(" "); // abrevia sobrenomes do meio: AURYJANIA P CAVALCANTE
+  s = [p[0],...p.slice(1,-1).map(x=>x[0]),p[p.length-1]].join(" ");
+  return s.slice(0,25);
+}
+function pixCopiaECola(valor){
+  const conta = tlv("00","br.gov.bcb.pix") + tlv("01",PIX.chave);
+  const corpo = tlv("00","01") + tlv("26",conta) + tlv("52","0000") + tlv("53","986")
+    + (valor>0 ? tlv("54",valor.toFixed(2)) : "") + tlv("58","BR")
+    + tlv("59",nomePix(PIX.nome)) + tlv("60",semAcento(PIX.cidade).slice(0,15))
+    + tlv("62",tlv("05","***")) + "6304";
+  return corpo + crc16(corpo);
+}
+function qrSvg(txt){
+  if(typeof qrcode!=="function") return "";
+  const q = qrcode(0,"M"); q.addData(txt); q.make();
+  return q.createSvgTag({cellSize:4,margin:0,scalable:true});
+}
+
+/* ======================= ESTADO ======================= */
+let cat = "todos";
+let sacola = guarda.ler("am-sacola",[]).filter(i=>byId(i.prodId)); // {chave,prodId,detalhe,frase?,preco,qtd}
+let codigo = guarda.ler("am-codigo",null) || novoCodigo();
+function novoCodigo(){
+  const a="ABCDEFGHJKMNPQRSTUVWXYZ23456789"; let s="";
+  const r=new Uint8Array(4); (window.crypto||{getRandomValues:x=>x.map(()=>Math.random()*256|0)}).getRandomValues(r);
+  r.forEach(n=>s+=a[n%a.length]); guarda.pôr("am-codigo","AM-"+s); return "AM-"+s;
+}
+const salvar = () => guarda.pôr("am-sacola",sacola);
+const qtdDe = prodId => sacola.filter(i=>i.prodId===prodId).reduce((s,i)=>s+i.qtd,0);
+const restam = p => p.estoque ? p.estoque - qtdDe(p.id) : Infinity;
+const precoPix = v => Math.round(v*(1-PIX_DESCONTO)*100)/100;
+
+/* ======================= VITRINE ======================= */
+function renderCats(){
+  $("#cats").innerHTML = CATS.map(c=>`<button class="cat" type="button" data-cat="${c.id}" aria-pressed="${c.id===cat}">${esc(c.nome)}</button>`).join("");
+}
+function card(p){
+  const f = fotoSm(p.foto);
+  const r = restam(p);
+  const etq = p.estoque ? `<span class="etq">${r>0?`Restam ${r}`:"Esgotado"}</span>` : p.pronta ? `<span class="etq">Pronta entrega</span>` : "";
+  const img = f ? `<img class="foto" src="${f}" alt="${esc(p.tipo+": "+p.nome)}" loading="lazy" width="480" height="600">`
+                : `<div class="sem-foto" aria-hidden="true">${esc(p.nome)}</div>`;
+  const preco = p.combinar ? `<span class="preco combinar">valor a combinar</span>`
+    : `<span class="preco">${p.bases?"a partir de ":""}${brl(p.bases?Math.min(...p.bases.map(b=>b[1])):p.preco)}</span>`
+      + (PIX_DESCONTO>0 && !p.bases ? `<span class="preco-pix">${brl(precoPix(p.preco))} no Pix</span>` : "");
+  const temOpcao = p.cores || p.tamanhos || p.bases;
+  const rotulo = p.combinar ? "Pedir orçamento" : temOpcao ? "Escolher" : "+ Adicionar";
+  return `<li class="peca"><button class="abrir" type="button" data-ver="${p.id}" aria-label="Ver detalhes: ${esc(p.nome)}">${img}${etq}</button>
+    <div class="corpo"><span class="tipo">${esc(p.tipo)}</span><h3 class="nome">${esc(p.nome)}</h3>${preco}
+    <button class="add" type="button" data-add="${p.id}" ${r<=0?"disabled":""}>${r<=0?"Esgotado":rotulo}</button></div></li>`;
+}
+function renderGrade(){
+  const lista = PRODUTOS.filter(p=>cat==="todos"||p.cat===cat);
+  $("#grade").innerHTML = lista.length ? lista.map(card).join("") : `<li class="vazio-cat">Nada aqui por enquanto.</li>`;
+}
+
+/* ======================= DETALHE DO PRODUTO ======================= */
+function chips(nome,opcoes,sel){
+  return `<div class="chips" role="radiogroup">${opcoes.map(o=>`<label><input type="radio" name="${nome}" value="${esc(o)}" ${o===sel?"checked":""}><span>${esc(o)}</span></label>`).join("")}</div>`;
+}
+function abrirDetalhe(id){
+  const p = byId(id); const d = $("#det");
+  $("#det-titulo").textContent = p.nome;
+  const f = fotoGr(p.foto);
+  const r = restam(p);
+  let h = f ? `<img class="det-foto" id="det-img" src="${f}" alt="${esc(p.tipo+": "+p.nome)}">` : "";
+  h += `<p class="det-txt"><b>${esc(p.tipo)}</b>${p.texto?` · ${esc(p.texto)}`:""}${p.estoque?` · ${r>0?`restam ${r}`:"esgotado"}`:""}</p>`;
+  if(p.bases) h += `<div class="grupo"><span class="legenda">Peça</span>${chips("base",p.bases.map(b=>b[0]),p.bases[0][0])}</div>
+    <div class="grupo"><label for="frase">Sua frase ou ideia</label><textarea id="frase" rows="2" placeholder="Ex.: o nome da minha avó com flores de ipê"></textarea></div>`;
+  if(p.cores){ const corFoto = p.fotoCor ? Object.keys(p.fotoCor).find(k=>p.fotoCor[k]===p.foto) : null;
+    h += `<div class="grupo"><span class="legenda">Cor</span>${chips("cor",p.cores,corFoto||p.cores[0])}</div>`; }
+  if(p.tamanhos) h += `<div class="grupo"><span class="legenda">Tamanho <a href="./#medidas" target="_blank" rel="noopener" style="text-transform:none;letter-spacing:0;font-weight:700">ver medidas</a></span>${chips("tam",p.tamanhos,"M")}</div>`;
+  if(p.combinar) h += `<p class="nota">Esta peça é feita sob medida. Ela entra na sacola como pedido de orçamento e o valor é combinado no WhatsApp.</p>`;
+  h += `<div class="linha-add">
+    ${p.combinar?"<span></span>":`<div class="qtd"><button type="button" data-q="-1" aria-label="Menos uma">−</button><output id="det-qtd">1</output><button type="button" data-q="1" aria-label="Mais uma">+</button></div>`}
+    <span class="preco" id="det-preco">${p.combinar?"":brl(p.bases?p.bases[0][1]:p.preco)}</span></div>
+    <button class="principal amarelo" type="button" id="det-add" data-prod="${p.id}" ${r<=0?"disabled":""}>${r<=0?"Esgotado":p.combinar?"Pedir orçamento":"Adicionar à sacola"}</button>`;
+  $("#det-corpo").innerHTML = h;
+  d.showModal(); d.querySelector(".conteudo").scrollTop = 0;
+}
+function precoDetalhe(p){
+  if(p.bases){ const b = $('#det input[name="base"]:checked').value; return p.bases.find(x=>x[0]===b)[1]; }
+  return p.preco;
+}
+function atualizaDetalhe(){
+  const p = byId($("#det-add").dataset.prod); const q = $("#det-qtd");
+  if(q) $("#det-preco").textContent = brl(precoDetalhe(p)*(+q.textContent));
+}
+function adicionar(p,{detalhe="",frase="",preco=p.preco,qtd=1}={}){
+  const chave = [p.id,detalhe,frase].join("|");
+  const ex = sacola.find(i=>i.chave===chave);
+  const max = restam(p);
+  const n = Math.min(qtd, max);
+  if(n<=0){ toast("Essa peça esgotou"); return false; }
+  if(ex) ex.qtd += p.combinar ? 0 : n; else sacola.push({chave,prodId:p.id,detalhe,frase,preco,qtd:p.combinar?1:n});
+  salvar(); renderTudo();
+  toast(p.combinar ? `Orçamento de “${p.nome}” na sacola` : `${n}× “${p.nome}” na sacola`);
+  return true;
+}
+function addDoDetalhe(){
+  const p = byId($("#det-add").dataset.prod);
+  const pega = n => $(`#det input[name="${n}"]:checked`)?.value;
+  let detalhe = [pega("cor"),pega("tam")].filter(Boolean).join(", ");
+  let frase = "";
+  if(p.bases){
+    frase = $("#frase").value.trim();
+    if(!frase){ toast("Escreva a frase ou ideia para a peça"); $("#frase").focus(); return; }
+    detalhe = pega("base");
+  }
+  const qtd = $("#det-qtd") ? +$("#det-qtd").textContent : 1;
+  if(adicionar(p,{detalhe,frase,preco:precoDetalhe(p),qtd})) $("#det").close();
+}
+
+/* ======================= SACOLA ======================= */
+const itemProd = i => byId(i.prodId);
+function contas(){
+  const n = sacola.reduce((s,i)=>s+i.qtd,0);
+  const sub = sacola.filter(i=>!itemProd(i).combinar).reduce((s,i)=>s+i.preco*i.qtd,0);
+  const combinar = sacola.some(i=>itemProd(i).combinar);
+  const ent = document.querySelector('input[name="entrega"]:checked').value;
+  const frete = ent!=="Retirada combinada";
+  const pag = document.querySelector('input[name="pag"]:checked').value;
+  return {n,sub,combinar,ent,frete,pag,pix:precoPix(sub)};
+}
+function nomeItem(i){ const p=itemProd(i); return p.bases ? `${i.detalhe} personalizada: "${i.frase}"` : `${p.tipo} "${p.nome}"`; }
+function detItem(i){ const p=itemProd(i); return p.bases ? "" : i.detalhe; }
+function renderSacola(){
+  const c = contas();
+  const ul = $("#itens");
+  ul.innerHTML = !sacola.length ? `<li class="nota" style="text-align:center;padding:16px 0">Sua sacola está vazia.</li>` :
+    sacola.map((i,k)=>{ const p=itemProd(i); const f=fotoSm(i.detalhe&&p.fotoCor?.[i.detalhe.split(", ")[0]]||p.foto);
+      const maisOff = p.combinar || restam(p)<=0;
+      return `<li class="item">${f?`<img src="${f}" alt="">`:`<span class="mini"></span>`}
+      <div><b>${esc(nomeItem(i))}</b>${detItem(i)?`<small>${esc(detItem(i))}</small>`:""}</div>
+      <span class="val">${p.combinar?"orçamento":brl(i.preco*i.qtd)}</span>
+      <div style="grid-column:2"><small>${p.combinar?"valor a combinar":brl(i.preco)+" cada"}</small></div>
+      <div class="qtd"><button type="button" data-menos="${k}" aria-label="Tirar uma">−</button><output>${i.qtd}</output><button type="button" data-mais="${k}" aria-label="Mais uma" ${maisOff?"disabled":""}>+</button></div></li>`; }).join("");
+  $("#t-sub").textContent = brl(c.sub);
+  $("#t-frete").textContent = c.frete ? "a combinar" : "sem frete";
+  $("#t-total").textContent = brl(c.sub) + (c.frete||c.combinar ? " +" : "");
+  const soPronta = sacola.length && sacola.every(i=>itemProd(i).pronta);
+  $("#t-prazo").textContent = !sacola.length ? "" : soPronta ? "Pronta entrega" : PRAZO;
+  renderPix(c);
+  atualizaEnvio();
+}
+function renderPix(c){
+  const area = $("#pix-area");
+  if(c.pag!=="pix" || !sacola.length){ area.innerHTML=""; return; }
+  if(c.sub<=0){ area.innerHTML = `<p class="nota">Sua sacola só tem itens de orçamento. Envie o pedido e a gente manda o valor pelo WhatsApp.</p>`; return; }
+  const codigoPix = pixCopiaECola(c.pix);
+  const fora = [c.frete?"o frete":null, c.combinar?"os itens de orçamento":null].filter(Boolean).join(" e ");
+  area.innerHTML = `<div class="pix-caixa">
+    <h3>Pague com Pix</h3>
+    <div class="pix-valor">${brl(c.pix)}</div>
+    ${PIX_DESCONTO>0?`<p class="nota">Já com ${Math.round(PIX_DESCONTO*100)}% de desconto no Pix.</p>`:""}
+    ${fora?`<p class="nota">Valor das peças. ${fora[0].toUpperCase()+fora.slice(1)} a gente combina no WhatsApp.</p>`:""}
+    <button class="principal" type="button" id="copiar-pix" style="width:100%">Copiar código Pix</button>
+    <div class="copia" id="pix-codigo">${esc(codigoPix)}</div>
+    <details style="width:100%"><summary style="cursor:pointer;font-weight:700">Mostrar QR Code (para pagar de outro aparelho)</summary>
+      <div class="qr" style="margin:10px auto 0" role="img" aria-label="QR Code do Pix de ${brl(c.pix)}">${qrSvg(codigoPix)}</div></details>
+    <p class="recebedor">Recebedora: <b>${esc(PIX.nome)}</b><br>CNPJ ${PIX.chave.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,"$1.$2.$3/$4-$5")}</p>
+    <ol class="passos"><li>Copie o código e pague no app do seu banco (Pix copia e cola).</li><li>Confira o nome da recebedora antes de confirmar.</li><li>Envie o pedido no WhatsApp com o comprovante.</li></ol>
+  </div>`;
+}
+function mensagem(){
+  const c = contas();
+  const nome = $("#nome").value.trim(), obs = $("#obs").value.trim();
+  const linhas = [];
+  sacola.forEach(i=>{ const p=itemProd(i);
+    linhas.push(`• ${nomeItem(i)} x${i.qtd} — ${p.combinar?"orçamento":brl(i.preco*i.qtd)}`);
+    if(detItem(i)) linhas.push(`   ↳ ${detItem(i)}`); });
+  const pagTxt = c.pag==="pix" && c.sub>0
+    ? `Pix de ${brl(c.pix)} (vou mandar o comprovante)`
+    : "combinar pelo WhatsApp";
+  return [
+    `🧾 Pedido ${codigo} — Artes Manuais`, "",
+    "Itens do pedido:", ...linhas, "",
+    `🛒 Peças: ${brl(c.sub)}`,
+    PIX_DESCONTO>0 && c.pag==="pix" && c.sub>0 ? `🏷️ Desconto Pix: −${brl(c.sub-c.pix)}` : null,
+    `🚚 ${c.ent}${c.frete?" (frete a combinar)":""}`,
+    `💰 Total: ${brl(c.pag==="pix"?c.pix:c.sub)}${c.frete||c.combinar?" + a combinar":""}`,
+    `💳 Pagamento: ${pagTxt}`,
+    nome?`👤 Nome: ${nome}`:null,
+    obs?`📝 Obs.: ${obs}`:null,
+  ].filter(l=>l!==null).join("\n");
+}
+function atualizaEnvio(){
+  const a = $("#enviar");
+  if(sacola.length){ a.href = `https://wa.me/${WHATS}?text=${encodeURIComponent(mensagem())}`; a.setAttribute("aria-disabled","false"); }
+  else { a.href="#"; a.setAttribute("aria-disabled","true"); }
+}
+function renderBarra(){
+  const c = contas();
+  $("#barra").classList.toggle("on", c.n>0);
+  $("#barra-total").textContent = brl(c.sub) + (c.combinar?" +":"");
+  $("#barra-qtd").textContent = `${c.n} ${c.n===1?"peça":"peças"} na sacola`;
+}
+function renderTudo(){ renderGrade(); renderBarra(); if($("#sacola").open) renderSacola(); }
+
+/* ======================= EVENTOS ======================= */
+document.addEventListener("click", e=>{
+  const t = e.target.closest("button,a"); if(!t) return;
+  if(t.dataset.cat){ cat=t.dataset.cat; renderCats(); renderGrade(); }
+  if(t.dataset.ver) abrirDetalhe(t.dataset.ver);
+  if(t.dataset.add){ const p=byId(t.dataset.add);
+    if(p.cores||p.tamanhos||p.bases||p.combinar) abrirDetalhe(p.id); else adicionar(p); }
+  if(t.dataset.q){ const o=$("#det-qtd"); const p=byId($("#det-add").dataset.prod);
+    o.textContent = Math.max(1, Math.min(+o.textContent + (+t.dataset.q), restam(p))); atualizaDetalhe(); }
+  if(t.id==="det-add") addDoDetalhe();
+  if(t.hasAttribute("data-fechar")) t.closest("dialog").close();
+  if(t.id==="abrir-sacola"){ renderSacola(); $("#sacola").showModal(); }
+  if(t.dataset.menos!==undefined){ const i=+t.dataset.menos; sacola[i].qtd--; if(!sacola[i].qtd) sacola.splice(i,1); salvar(); renderTudo();
+    if(!sacola.length){ $("#sacola").close(); codigo = novoCodigo(); } }
+  if(t.dataset.mais!==undefined){ const i=sacola[+t.dataset.mais]; if(restam(itemProd(i))>0){ i.qtd++; salvar(); renderTudo(); } }
+  if(t.id==="copiar-pix") copiar($("#pix-codigo").textContent,"Código Pix copiado. Cole no app do seu banco.");
+});
+document.addEventListener("change", e=>{
+  if(e.target.closest("#det")){
+    if(e.target.name==="cor"){ const p=byId($("#det-add").dataset.prod); const f=p.fotoCor?.[e.target.value]; if(f&&$("#det-img")) $("#det-img").src=fotoGr(f); }
+    atualizaDetalhe();
+  }
+  if(e.target.name==="entrega"||e.target.name==="pag") renderSacola();
+});
+document.addEventListener("input", e=>{
+  if(e.target.id==="nome"){ guarda.pôr("am-nome",e.target.value); atualizaEnvio(); }
+  if(e.target.id==="obs") atualizaEnvio();
+});
+document.querySelectorAll("dialog").forEach(d=>d.addEventListener("click",e=>{ if(e.target===d) d.close(); }));
+$("#nome").value = guarda.ler("am-nome","");
+
+renderCats(); renderTudo();
+</script>
+</body>
+</html>
