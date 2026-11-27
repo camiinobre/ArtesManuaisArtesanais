@@ -39,6 +39,6 @@ No começo do `<script>` de `index.html`, `loja.html` e `pedido.html` há uma li
 
 | Modo | Preços | Pix | Envio para outra cidade | Quando usar |
 |---|---|---|---|---|
-| `catalogo` | ocultos | não | sim (frete a combinar) | enquanto a loja não pode vender com nota (modo atual) |
-| `vitrine` | visíveis | não | não, só retirada ou entrega em Fortaleza | se a contabilidade confirmar que venda local sem nota é permitida |
+| `catalogo` | ocultos | não | sim (frete a combinar) | enquanto a loja não pode vender com nota |
+| `vitrine` | visíveis | não | não, só retirada ou entrega em Fortaleza | se a contabilidade confirmar que venda local sem nota é permitida (modo atual) |
 | `loja` | visíveis | sim | sim | com o certificado A1 ativo e emitindo NF-e |
