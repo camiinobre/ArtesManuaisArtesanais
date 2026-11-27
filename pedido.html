@@ -142,7 +142,7 @@ body.catalogo .total .l{display:none}
         <div class="entregas" id="entregas">
           <label><input type="radio" name="entrega" id="ent-retirada" value="Retirada combinada" checked> Retirar comigo (combinamos o local)</label>
           <label><input type="radio" name="entrega" id="ent-fortaleza" value="Entrega em Fortaleza"> Entrega em Fortaleza</label>
-          <label><input type="radio" name="entrega" id="ent-envio" value="Envio pelos Correios"> Envio para outra cidade</label>
+          <label id="lbl-envio"><input type="radio" name="entrega" id="ent-envio" value="Envio pelos Correios"> Envio para outra cidade</label>
         </div>
       </div>
       <div class="campo"><label for="obs">Observações</label><textarea id="obs" rows="2" placeholder="Data especial, presente, dúvida..."></textarea></div>
@@ -165,9 +165,14 @@ body.catalogo .total .l{display:none}
 const IMG = new Proxy({}, {get:(_,k)=>typeof k==="string"?`img/${k}-sm.webp`:undefined});
 const WHATS = "5585982197478";
 const PRAZO = "Pronto em até 3 dias úteis";
-/* MODO CATÁLOGO: true = esconde preços; a cliente manda a lista de peças no WhatsApp.
-   Troque para false quando a loja puder vender com nota fiscal (certificado A1 ativo). */
-const CATALOGO = true;
+/* MODO DO SITE (mude só a palavra entre aspas):
+   "catalogo" = sem preços e sem Pix: a cliente manda a lista no WhatsApp e pergunta o preço (modo atual);
+   "vitrine"  = com preços, sem Pix e sem envio para outra cidade: pedido e pagamento combinados no WhatsApp,
+                só retirada ou entrega em Fortaleza. Ligar só depois que a contabilidade confirmar que pode;
+   "loja"     = completo, com Pix e envio pelos Correios (quando o certificado A1 estiver ativo). */
+const MODO = "catalogo";
+const CATALOGO = MODO === "catalogo";
+const VITRINE = MODO === "vitrine";
 const CORES_CAMISETA = ["Branca","Preta","Vermelha","Amarela"];
 const TAMANHOS = ["PP","P","M","G","GG"];
 const C = (id,tipo,nome,preco,extra={}) => ({id,tipo,nome,preco,...extra});
@@ -388,6 +393,7 @@ document.addEventListener("change",e=>{
   if(e.target.name==="entrega") render();
 });
 document.addEventListener("input",e=>{ if(e.target.id==="nome"||e.target.id==="obs") atualizaLink(); });
+if(VITRINE) $("#lbl-envio").style.display = "none";
 if(CATALOGO){
   document.body.classList.add("catalogo");
   $(".sub").textContent = "Escolha as peças e mande a lista no nosso WhatsApp. A gente passa preço, prazo e frete por lá.";

@@ -308,8 +308,14 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
 <script>
 // Catálogo: para adicionar um produto, coloque a foto em img/ (nome.webp e nome-sm.webp) e acrescente uma linha aqui.
 const WPP = '5585982197478';
-// MODO CATÁLOGO: true = esconde os preços. Troque para false quando a loja puder vender com nota fiscal.
-const CATALOGO = true;
+/* MODO DO SITE (mude só a palavra entre aspas):
+   "catalogo" = sem preços e sem Pix: a cliente manda a lista no WhatsApp e pergunta o preço (modo atual);
+   "vitrine"  = com preços, sem Pix e sem envio para outra cidade: pedido e pagamento combinados no WhatsApp,
+                só retirada ou entrega em Fortaleza. Ligar só depois que a contabilidade confirmar que pode;
+   "loja"     = completo, com Pix e envio pelos Correios (quando o certificado A1 estiver ativo). */
+const MODO = "catalogo";
+const CATALOGO = MODO === "catalogo";
+const VITRINE = MODO === "vitrine";
 const canecas = [
   ['latina-demais','Latina demais para ser minimalista','Caneca branca'],
   ['coragem-de-desagradar','Tenha a coragem de desagradar','Caneca branca quadrada'],
