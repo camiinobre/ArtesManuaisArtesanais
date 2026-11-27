@@ -238,6 +238,10 @@ const CATS = [
   {id:"canecas",nome:"Canecas"},
   {id:"copos",nome:"Copos"},
   {id:"camisetas",nome:"Camisetas"},
+  {id:"quadros",nome:"Quadros"},
+  {id:"natal",nome:"Natal"},
+  {id:"bottons",nome:"Bottons"},
+  {id:"imas",nome:"Ímãs"},
   {id:"encomenda",nome:"Sob encomenda"},
 ];
 const P = (id,cat,tipo,nome,preco,extra={}) => ({id,cat,tipo,nome,preco,foto:id,...extra});
@@ -245,23 +249,79 @@ const PRODUTOS = [
   P("latina-demais","canecas","Caneca","Latina demais para ser minimalista",30),
   P("coragem-de-desagradar","canecas","Caneca","Tenha a coragem de desagradar",30),
   P("praticar-a-rebeldia","canecas","Caneca","Praticar a rebeldia de não ser perfeita",30),
-  P("rainha","canecas","Caneca","No meu tabuleiro, rainha",30),
+  P("rainha","canecas","Caneca","No meu tabuleiro, a rainha ganha o jogo",30),
   P("tardezinha","canecas","Caneca","De tarde não, de tardezinha",30),
   P("baralho","canecas","Caneca","No meu baralho não há rei maior que a dama",30),
-  P("deixa-digam","canecas","Caneca","Deixa digam, pensem, falem",30),
+  P("deixa-digam","canecas","Caneca","Deixa que digam, que pensem, que falem",30),
   P("corazon-partio","canecas","Caneca","Tiritas pra esse corazón partío",30),
-  P("onca","canecas","Caneca","Calma, sou onça",30),
-  P("desobediencia","canecas","Caneca","Nunca reverência, sempre desobediência",30),
+  P("onca","canecas","Caneca","Calma como uma onça",30),
+  P("desobediencia","canecas","Caneca","Nunca reverenciar, sempre desobedecer",30),
   P("nao-vale-a-pena","canecas","Caneca","Não vale a pena trazer esse teu amor de volta",30),
-  P("jesus","canecas","Caneca","Sagrado Coração",30),
+  P("jesus","canecas","Caneca","Cristo abençoador",30),
   P("estrela-marrom","canecas","Caneca","Há de surgir uma estrela",30,{cores:["Marrom","Amarela"],fotoCor:{Marrom:"estrela-marrom",Amarela:"estrela-amarela"}}),
   P("exu-na-defesa","copos","Copo de vidro","Exu na defesa, eu mesma no ataque",20,{estoque:2,pronta:true}),
   P("nao-me-comove","copos","Copo americano","Não me comove o pranto de quem é ruim",12,{estoque:5,pronta:true}),
   P("nordeste-preta","camisetas","Camiseta","O Nordeste faz tudo",30,{cores:CORES_CAMISETA,tamanhos:TAMANHOS,fotoCor:{Preta:"nordeste-preta",Branca:"nordeste-branca"}}),
   P("bruxas","camisetas","Camiseta","Bruxas não se curvam ao fascismo",30,{cores:CORES_CAMISETA,tamanhos:TAMANHOS}),
   P("estrela-que-brilha","camisetas","Camiseta","A estrela que brilha",30,{cores:CORES_CAMISETA,tamanhos:TAMANHOS}),
+  P("bruxa","quadros","Quadro","As más vão para onde querem",35,{estoque:1,pronta:true}),
+  P("caderno","quadros","Quadro","Caderno rosa",25,{estoque:1,pronta:true}),
+  P("memoria-afetiva","quadros","Quadro","Quadro da memória afetiva",25,{estoque:1,pronta:true}),
+  P("saudade","quadros","Quadro","Oi, saudade",35,{estoque:1,pronta:true}),
+  P("chinelo","quadros","Quadro","Menos dress code, mais chinelo no pé",25,{estoque:1,pronta:true}),
+  P("nossa-senhora","quadros","Quadro","Eu não sou santa, mas sei que a santa me adora",25,{estoque:1,pronta:true}),
+  P("bar","quadros","Quadro","Barraca de praia",50,{estoque:1,pronta:true}),
+  P("baralho-quadro","quadros","Quadro","No meu baralho não há rei maior que a dama",46,{estoque:1,pronta:true}),
+  P("tabuleiro","quadros","Quadro","No meu tabuleiro a rainha ganha o jogo",38,{estoque:1,pronta:true}),
+  P("mulher-oculos","quadros","Quadro","Imagina o que as mulheres produziriam se também tivessem uma esposa em casa",35,{estoque:1,pronta:true}),
+  P("todo-mal","quadros","Quadro","Todo mal que colidir contra mim regridirá",40,{estoque:1,pronta:true}),
+  P("energias","quadros","Quadro","Energias negativas não combinam com meus looks",40,{estoque:1,pronta:true}),
+  P("venus","quadros","Quadro","Vênus",50,{estoque:1,pronta:true}),
+  P("ampulheta","quadros","Quadro","Tem papo que não vale o tic-tac do relógio",40,{estoque:1,pronta:true}),
+  P("porta-joia","quadros","Quadro","Porta-joia",40,{estoque:1,pronta:true}),
+  P("estrela-quadro","quadros","Quadro","Há de surgir uma estrela no céu cada vez que você sorrir",40,{estoque:1,pronta:true}),
+  P("cigana","quadros","Quadro","Olhos de cigana oblíqua e dissimulada",25,{estoque:1,pronta:true}),
+  P("botton-jujutsu","bottons","Botton","Jujutsu Kaisen",8,{estoque:1,pronta:true}),
+  P("botton-requiem","bottons","Botton","Requiem",8,{estoque:1,pronta:true}),
+  P("botton-gta-vi","bottons","Botton","GTA VI",8,{estoque:1,pronta:true}),
+  P("botton-army","bottons","Botton","ARMY",8,{estoque:1,pronta:true}),
+  P("botton-frieren","bottons","Botton","Frieren",8,{estoque:1,pronta:true}),
+  P("botton-estrela","bottons","Botton","Estrela de Mario",8,{estoque:1,pronta:true}),
+  P("botton-one-piece","bottons","Botton","One Piece",8,{estoque:1,pronta:true}),
+  P("natal-01","natal","Enfeite de Natal","Árvore verde com luzinhas",20,{estoque:1,pronta:true}),
+  P("natal-02","natal","Enfeite de Natal","Fé – pinheiro e ramos",15,{estoque:1,pronta:true}),
+  P("natal-03","natal","Enfeite de Natal","Árvore colorida",20,{estoque:1,pronta:true}),
+  P("natal-04","natal","Enfeite de Natal","Bola com ondas e estrelas",18,{estoque:1,pronta:true}),
+  P("natal-05","natal","Enfeite de Natal","Estrela com frutinhas (peça 1)",20,{estoque:1,pronta:true}),
+  P("natal-06","natal","Enfeite de Natal","Árvore verde com estrela",20,{estoque:1,pronta:true}),
+  P("natal-07","natal","Enfeite de Natal","Bola com árvore e ramos",18,{estoque:1,pronta:true}),
+  P("natal-08","natal","Enfeite de Natal","Papai Noel – presente azul",20,{estoque:1,pronta:true}),
+  P("natal-09","natal","Enfeite de Natal","Sininho vermelho",15,{estoque:1,pronta:true}),
+  P("natal-10","natal","Enfeite de Natal","União – bolinhas douradas",15,{estoque:1,pronta:true}),
+  P("natal-11","natal","Enfeite de Natal","Sino, estrelas e presente",18,{estoque:1,pronta:true}),
+  P("natal-12","natal","Enfeite de Natal","União – branca com estrelas",15,{estoque:1,pronta:true}),
+  P("natal-13","natal","Enfeite de Natal","Alegria",15,{estoque:1,pronta:true}),
+  P("natal-14","natal","Enfeite de Natal","Felicidade",15,{estoque:1,pronta:true}),
+  P("natal-15","natal","Enfeite de Natal","Amor",15,{estoque:1,pronta:true}),
+  P("natal-16","natal","Enfeite de Natal","Sorte – flor vermelha",15,{estoque:1,pronta:true}),
+  P("natal-17","natal","Enfeite de Natal","Estrela com frutinhas (peça 2)",20,{estoque:1,pronta:true}),
+  P("natal-18","natal","Enfeite de Natal","Papai Noel – presente rosa",20,{estoque:1,pronta:true}),
+  P("natal-19","natal","Enfeite de Natal","Saúde",15,{estoque:1,pronta:true}),
+  P("natal-20","natal","Enfeite de Natal","Fé – pinheirinho",15,{estoque:1,pronta:true}),
+  P("natal-21","natal","Enfeite de Natal","Feliz Natal – verde",18,{estoque:1,pronta:true}),
+  P("natal-22","natal","Enfeite de Natal","Papai Noel – fundo turquesa",20,{estoque:1,pronta:true}),
+  P("natal-23","natal","Enfeite de Natal","Prosperidade",15,{estoque:1,pronta:true}),
+  P("natal-24","natal","Enfeite de Natal","Guirlanda",15,{estoque:1,pronta:true}),
+  P("natal-25","natal","Enfeite de Natal","Bola de losangos",18,{estoque:1,pronta:true}),
+  P("natal-26","natal","Enfeite de Natal","Fé – bola vermelha",15,{estoque:1,pronta:true}),
+  P("natal-27","natal","Enfeite de Natal","Sorte – trevo verde",15,{estoque:1,pronta:true}),
+  P("natal-28","natal","Enfeite de Natal","Papai Noel – corpo inteiro",20,{estoque:1,pronta:true}),
+  P("ima-demon-slayer","imas","Ímã","Tanjiro",8,{estoque:1,pronta:true}),
+  P("ima-bt21","imas","Ímã","BTS",8,{estoque:1,pronta:true}),
+  P("ima-grinch","imas","Ímã","Grinch de Natal",8,{estoque:1,pronta:true}),
+  P("ima-naruto","imas","Ímã","Naruto",8,{estoque:1,pronta:true}),
   P("sua-arte","encomenda","Personalizado","Sua arte, sua frase",30,{foto:null,texto:"Mande a frase ou o desenho e a gente transforma na peça.",bases:[["Caneca",30],["Camiseta",30],["Copo americano",12]]}),
-  P("ceramica","encomenda","Sob encomenda","Cerâmica fria",0,{foto:"ceramica-feliz-natal",combinar:true,texto:"Peças modeladas à mão, com edição especial de Natal."}),
+  P("ceramica","encomenda","Sob encomenda","Cerâmica fria sob encomenda",0,{foto:"ceramica-feliz-natal",combinar:true,texto:"Outros desenhos e frases de Natal, modelados à mão. Os enfeites prontos estão na categoria Natal."}),
   P("imas","encomenda","Sob encomenda","Ímãs de geladeira",0,{foto:null,combinar:true,texto:"Com arte da casa ou a sua foto, para lembrança, festa e brinde."}),
   P("adesivos","encomenda","Sob encomenda","Adesivos e recortes",0,{foto:null,combinar:true,texto:"Adesivos e etiquetas recortados na medida, para embalagem ou lembrancinha."}),
   P("lula","encomenda","Sob encomenda","Estampas Lula e Brasil 13",0,{foto:null,combinar:true,texto:"Lula Lá, Brasil 13 e outras artes em camiseta e caneca."}),
@@ -337,7 +397,8 @@ function renderCats(){
 function card(p){
   const f = fotoSm(p.foto);
   const r = restam(p);
-  const etq = p.estoque ? `<span class="etq">${r>0?`Restam ${r}`:"Esgotado"}</span>` : p.pronta ? `<span class="etq">Pronta entrega</span>` : "";
+  const naSacola = qtdDe(p.id) > 0;
+  const etq = p.estoque ? `<span class="etq">${r>0?(p.estoque===1?"Peça única":`Restam ${r}`):naSacola?"Na sacola":"Esgotado"}</span>` : p.pronta ? `<span class="etq">Pronta entrega</span>` : "";
   const img = f ? `<img class="foto" src="${f}" alt="${esc(p.tipo+": "+p.nome)}" loading="lazy" width="480" height="600">`
                 : `<div class="sem-foto" aria-hidden="true">${esc(p.nome)}</div>`;
   const preco = p.combinar ? `<span class="preco combinar">valor a combinar</span>`
@@ -347,7 +408,7 @@ function card(p){
   const rotulo = p.combinar ? "Pedir orçamento" : temOpcao ? "Escolher" : "+ Adicionar";
   return `<li class="peca"><button class="abrir" type="button" data-ver="${p.id}" aria-label="Ver detalhes: ${esc(p.nome)}">${img}${etq}</button>
     <div class="corpo"><span class="tipo">${esc(p.tipo)}</span><h3 class="nome">${esc(p.nome)}</h3>${preco}
-    <button class="add" type="button" data-add="${p.id}" ${r<=0?"disabled":""}>${r<=0?"Esgotado":rotulo}</button></div></li>`;
+    <button class="add" type="button" data-add="${p.id}" ${r<=0?"disabled":""}>${r<=0?(naSacola?"Na sacola ✓":"Esgotado"):rotulo}</button></div></li>`;
 }
 function renderGrade(){
   const lista = PRODUTOS.filter(p=>cat==="todos"||p.cat===cat);
@@ -364,7 +425,7 @@ function abrirDetalhe(id){
   const f = fotoGr(p.foto);
   const r = restam(p);
   let h = f ? `<img class="det-foto" id="det-img" src="${f}" alt="${esc(p.tipo+": "+p.nome)}">` : "";
-  h += `<p class="det-txt"><b>${esc(p.tipo)}</b>${p.texto?` · ${esc(p.texto)}`:""}${p.estoque?` · ${r>0?`restam ${r}`:"esgotado"}`:""}</p>`;
+  h += `<p class="det-txt"><b>${esc(p.tipo)}</b>${p.texto?` · ${esc(p.texto)}`:""}${p.estoque?` · ${r>0?(p.estoque===1?"peça única":`restam ${r}`):qtdDe(p.id)?"já está na sacola":"esgotado"}`:""}</p>`;
   if(p.bases) h += `<div class="grupo"><span class="legenda">Peça</span>${chips("base",p.bases.map(b=>b[0]),p.bases[0][0])}</div>
     <div class="grupo"><label for="frase">Sua frase ou ideia</label><textarea id="frase" rows="2" placeholder="Ex.: o nome da minha avó com flores de ipê"></textarea></div>`;
   if(p.cores){ const corFoto = p.fotoCor ? Object.keys(p.fotoCor).find(k=>p.fotoCor[k]===p.foto) : null;
@@ -374,7 +435,7 @@ function abrirDetalhe(id){
   h += `<div class="linha-add">
     ${p.combinar?"<span></span>":`<div class="qtd"><button type="button" data-q="-1" aria-label="Menos uma">−</button><output id="det-qtd">1</output><button type="button" data-q="1" aria-label="Mais uma">+</button></div>`}
     <span class="preco" id="det-preco">${p.combinar?"":brl(p.bases?p.bases[0][1]:p.preco)}</span></div>
-    <button class="principal amarelo" type="button" id="det-add" data-prod="${p.id}" ${r<=0?"disabled":""}>${r<=0?"Esgotado":p.combinar?"Pedir orçamento":"Adicionar à sacola"}</button>`;
+    <button class="principal amarelo" type="button" id="det-add" data-prod="${p.id}" ${r<=0?"disabled":""}>${r<=0?(qtdDe(p.id)?"Já está na sacola":"Esgotado"):p.combinar?"Pedir orçamento":"Adicionar à sacola"}</button>`;
   $("#det-corpo").innerHTML = h;
   d.showModal(); d.querySelector(".conteudo").scrollTop = 0;
 }
