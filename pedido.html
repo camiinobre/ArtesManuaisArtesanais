@@ -15,7 +15,7 @@
 /* Layout: bancada de peças à esquerda, comanda de papel fixa à direita (vira gaveta no celular) */
 :root{
   --papel:#FBF5E8; --cartao:#FFFDF7; --tinta:#1D0A6E; --indigo:#2A0BA8; --girassol:#FCD71A;
-  --hibisco:#7120BA; --aquarela:#AED4F3; --linha:#E6DCC6; --suave:#5B5280; --ok:#1E7A4C;
+  --hibisco:#7120BA; --aquarela:#AED4F3; --linha:#E6DCC6; --suave:#5B5280; --ok:#1E7A4C; --foco:#7120BA; --borda-campo:#857DA6;
   --sombra:0 1px 0 rgba(29,10,110,.06),0 8px 24px -12px rgba(29,10,110,.25);
   --f-tit:"Baloo 2",ui-rounded,"Arial Rounded MT Bold",system-ui,sans-serif;
   --f-txt:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -23,10 +23,10 @@
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --papel:#140A33; --cartao:#1E1247; --tinta:#F6EFE0; --indigo:#B9A8FF; --girassol:#FCD71A;
-  --hibisco:#D6A6FF; --aquarela:#2E3D73; --linha:#352763; --suave:#B7AED6; --ok:#6FD3A0; color-scheme:dark}}
+  --hibisco:#D6A6FF; --aquarela:#2E3D73; --linha:#352763; --suave:#B7AED6; --ok:#6FD3A0; --foco:#FCD71A; --borda-campo:#7A6BB5; color-scheme:dark}}
 :root[data-theme="dark"]{
   --papel:#140A33; --cartao:#1E1247; --tinta:#F6EFE0; --indigo:#B9A8FF; --girassol:#FCD71A;
-  --hibisco:#D6A6FF; --aquarela:#2E3D73; --linha:#352763; --suave:#B7AED6; --ok:#6FD3A0; color-scheme:dark}
+  --hibisco:#D6A6FF; --aquarela:#2E3D73; --linha:#352763; --suave:#B7AED6; --ok:#6FD3A0; --foco:#FCD71A; --borda-campo:#7A6BB5; color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--papel);color:var(--tinta);font-family:var(--f-txt);font-size:15px;line-height:1.5;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 120px}
@@ -42,7 +42,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;align-items
 .abas{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
 .aba{font:inherit;font-weight:800;padding:8px 14px;border-radius:10px;border:1.5px solid var(--linha);background:transparent;color:var(--tinta);cursor:pointer}
 .aba[aria-selected="true"]{background:var(--indigo);border-color:var(--indigo);color:var(--papel)}
-.aba:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--girassol);outline-offset:2px}
+.aba:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--foco);outline-offset:2px}
 .grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:16px}
 .peca{background:var(--cartao);border:1px solid var(--linha);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
 .foto{aspect-ratio:4/5;max-width:100%;background:var(--aquarela);position:relative}
@@ -55,7 +55,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;align-items
 .preco{font-weight:800;font-variant-numeric:tabular-nums}
 .preco.combinar{font-family:var(--f-mao);font-size:20px;font-weight:600;color:var(--suave)}
 .opcoes{display:flex;gap:6px}
-.opcoes select,.campo select,.campo input,.campo textarea{font:inherit;font-size:14px;color:var(--tinta);background:var(--papel);border:1.5px solid var(--linha);border-radius:8px;padding:6px 8px;width:100%;min-width:0}
+.opcoes select,.campo select,.campo input,.campo textarea{font:inherit;font-size:14px;color:var(--tinta);background:var(--papel);border:1.5px solid var(--borda-campo);border-radius:8px;padding:6px 8px;width:100%;min-width:0}
 .add{font:inherit;font-weight:800;border:0;border-radius:10px;padding:8px 12px;background:var(--girassol);color:#1D0A6E;cursor:pointer;white-space:nowrap}
 .add:hover{filter:brightness(.95)}
 .add:disabled{opacity:.45;cursor:not-allowed}
@@ -102,6 +102,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;align-items
   .barra{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:5;gap:12px;align-items:center;justify-content:space-between;
     background:var(--indigo);color:var(--papel);padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
   .barra a{color:#1D0A6E;background:var(--girassol);text-decoration:none;font-weight:800;padding:8px 14px;border-radius:10px}
+  .barra a:focus-visible{outline-color:var(--papel)}
 }
 @media (prefers-reduced-motion:no-preference){.peca{transition:transform .15s}.peca:hover{transform:translateY(-2px)}}
 </style>
