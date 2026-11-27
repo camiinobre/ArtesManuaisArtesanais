@@ -107,6 +107,7 @@ h2{font:800 clamp(1.7rem,3.4vw,2.4rem)/1.1 var(--titulo);color:var(--indigo);mar
 
 .camisetas{background:var(--aquarela)}
 .camisetas .produto img,.quadros .produto img{border-radius:14px}
+#bottons .produto img,#imas .produto img{background:#d8dcdc}
 .quadros .produto .tipo b{opacity:1;color:var(--indigo)}
 .medidas{margin-top:56px;max-width:560px}
 .medidas h3{font:800 1.5rem/1.2 var(--titulo);color:var(--indigo);margin:0 0 6px}
@@ -164,6 +165,8 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
       <a href="#canecas">Canecas</a>
       <a href="#camisetas">Camisetas</a>
       <a href="#quadros">Quadros</a>
+      <a href="#bottons">Bottons</a>
+      <a href="#imas">Ímãs</a>
       <a href="pedido.html">Monte seu pedido</a>
       <a class="opc" href="#encomenda">Sob encomenda</a>
       <a class="opc" href="#como-pedir">Como pedir</a>
@@ -229,6 +232,22 @@ dialog .fechar{position:absolute;top:8px;right:8px;background:var(--girassol);co
       <h2>Quadros</h2>
       <p class="intro">Quadros com frases e artes autorais. Toque na foto para ver maior e no link para pedir.</p>
       <ul class="grade" id="grade-quadros"></ul>
+    </div>
+  </section>
+
+  <section id="bottons" class="quadros">
+    <div class="wrap">
+      <h2>Bottons</h2>
+      <p class="intro">Bottons de acrílico, todos a R$ 8,00. Toque na foto para ver maior e no link para pedir.</p>
+      <ul class="grade" id="grade-bottons"></ul>
+    </div>
+  </section>
+
+  <section id="imas" class="quadros">
+    <div class="wrap">
+      <h2>Ímãs</h2>
+      <p class="intro">Ímãs de acrílico para geladeira, todos a R$ 8,00. Toque na foto para ver maior e no link para pedir.</p>
+      <ul class="grade" id="grade-imas"></ul>
     </div>
   </section>
 
@@ -322,6 +341,21 @@ const quadros = [
   ['porta-joia',"Porta-joia",'Quadro',40],
   ['estrela-quadro',"Há de surgir uma estrela no céu cada vez que você sorrir",'Quadro',40],
 ];
+const bottons = [
+  ['botton-jujutsu','','Botton',8,'Jujutsu Kaisen'],
+  ['botton-requiem','','Botton',8,'Requiem'],
+  ['botton-gta-vi','','Botton',8,'GTA VI'],
+  ['botton-army','','Botton',8,'ARMY'],
+  ['botton-frieren','','Botton',8,'Frieren'],
+  ['botton-estrela','','Botton',8,'estrela de Mario'],
+  ['botton-one-piece','','Botton',8,'One Piece'],
+];
+const imas = [
+  ['ima-demon-slayer','','Ímã',8,'Demon Slayer'],
+  ['ima-bt21','','Ímã',8,'BT21'],
+  ['ima-grinch','','Ímã',8,'Grinch de Natal'],
+  ['ima-naruto','','Ímã',8,'Naruto'],
+];
 const linkWpp = msg => `https://wa.me/${WPP}?text=${encodeURIComponent(msg)}`;
 const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 function monta(id, itens){
@@ -338,6 +372,8 @@ function monta(id, itens){
 monta('grade-canecas', canecas);
 monta('grade-camisetas', camisetas);
 monta('grade-quadros', quadros);
+monta('grade-bottons', bottons);
+monta('grade-imas', imas);
 document.querySelectorAll('[data-wpp]').forEach(a => { a.href = linkWpp(a.dataset.wpp); a.target='_blank'; a.rel='noopener'; });
 
 const dlg = document.getElementById('zoom');

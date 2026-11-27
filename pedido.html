@@ -124,6 +124,8 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;align-items
         <button class="aba" role="tab" id="aba-canecas" aria-selected="true" data-aba="canecas">Canecas e copos</button>
         <button class="aba" role="tab" id="aba-camisetas" aria-selected="false" data-aba="camisetas">Camisetas</button>
         <button class="aba" role="tab" id="aba-quadros" aria-selected="false" data-aba="quadros">Quadros</button>
+        <button class="aba" role="tab" id="aba-bottons" aria-selected="false" data-aba="bottons">Bottons</button>
+        <button class="aba" role="tab" id="aba-imas" aria-selected="false" data-aba="imas">Ímãs</button>
         <button class="aba" role="tab" id="aba-encomenda" aria-selected="false" data-aba="encomenda">Sob encomenda</button>
       </div>
       <div id="vitrine"></div>
@@ -198,6 +200,21 @@ const PRODUTOS = {
     C("ampulheta","Quadro","Tem papo que não vale o tic-tac do relógio",40,{estoque:1,pronta:true}),
     C("porta-joia","Quadro","Porta-joia",40,{estoque:1,pronta:true}),
     C("estrela-quadro","Quadro","Há de surgir uma estrela no céu cada vez que você sorrir",40,{estoque:1,pronta:true}),
+  ],
+  bottons:[
+    C("botton-jujutsu","Botton","",8,{desc:"Jujutsu Kaisen"}),
+    C("botton-requiem","Botton","",8,{desc:"Requiem"}),
+    C("botton-gta-vi","Botton","",8,{desc:"GTA VI"}),
+    C("botton-army","Botton","",8,{desc:"ARMY"}),
+    C("botton-frieren","Botton","",8,{desc:"Frieren"}),
+    C("botton-estrela","Botton","",8,{desc:"estrela de Mario"}),
+    C("botton-one-piece","Botton","",8,{desc:"One Piece"}),
+  ],
+  imas:[
+    C("ima-demon-slayer","Ímã","",8,{desc:"Demon Slayer"}),
+    C("ima-bt21","Ímã","",8,{desc:"BT21"}),
+    C("ima-grinch","Ímã","",8,{desc:"Grinch de Natal"}),
+    C("ima-naruto","Ímã","",8,{desc:"Naruto"}),
   ],
   camisetas:[
     C("nordeste-preta","Camiseta","O Nordeste faz tudo",30,{camiseta:true,fotoCor:{Preta:"nordeste-preta",Branca:"nordeste-branca"}}),
@@ -300,7 +317,7 @@ document.addEventListener("click",e=>{
   const t=e.target.closest("button,a"); if(!t) return;
   if(t.dataset.aba){ aba=t.dataset.aba; render(); }
   if(t.dataset.add){
-    const p=[...PRODUTOS.canecas,...PRODUTOS.camisetas,...PRODUTOS.quadros].find(x=>x.id===t.dataset.add);
+    const p=Object.values(PRODUTOS).flat().find(x=>x.id===t.dataset.add);
     let detalhe="", chave=p.id;
     if(p.camiseta){ const cor=$("#cor-"+p.id).value, tam=$("#tam-"+p.id).value; detalhe=`${cor}, ${tam}`; chave+=`|${cor}|${tam}`; }
     if(p.cores){ const cor=$("#cor-"+p.id).value; detalhe=cor; chave+="|"+cor; }
@@ -318,7 +335,7 @@ document.addEventListener("click",e=>{
   }
   if(t.dataset.menos!==undefined){ const i=+t.dataset.menos; pedido[i].qtd--; if(!pedido[i].qtd) pedido.splice(i,1); render(); }
   if(t.dataset.mais!==undefined){ const i=+t.dataset.mais; const p=pedido[i]; const total=p.max?qtdNoPedido(p.prodId):0;
-    const prod=[...PRODUTOS.canecas,...PRODUTOS.quadros].find(x=>x.id===p.prodId); if(!prod?.estoque || total<prod.estoque){p.qtd++;} render(); }
+    const prod=Object.values(PRODUTOS).flat().find(x=>x.id===p.prodId); if(!prod?.estoque || total<prod.estoque){p.qtd++;} render(); }
   if(t.id==="copiar"){
     if(!pedido.length){ toast("Adicione uma peça primeiro"); return; }
     const txt=mensagem();
