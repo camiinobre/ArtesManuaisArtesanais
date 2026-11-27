@@ -65,7 +65,7 @@ a{color:var(--indigo)}
 .peca .abrir{all:unset;cursor:pointer;display:block;position:relative}
 .peca .abrir:focus-visible{outline:3px solid var(--foco);outline-offset:-3px}
 .foto{aspect-ratio:4/5;background:var(--aquarela);width:100%;height:auto;object-fit:cover}
-.sem-foto{aspect-ratio:4/5;background:var(--aquarela);display:grid;place-items:center;padding:16px;text-align:center;font-family:var(--f-mao);font-size:24px;line-height:1.1;color:#1D0A6E}
+.sem-foto{aspect-ratio:4/5;background:var(--aquarela);display:grid;place-items:center;padding:16px;text-align:center;font-family:var(--f-mao);font-size:24px;line-height:1.1;color:var(--tinta)}
 .etq{position:absolute;left:8px;top:8px;background:var(--girassol);color:#1D0A6E;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px}
 .corpo{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
 .tipo{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--hibisco)}
@@ -85,6 +85,7 @@ a{color:var(--indigo)}
 .barra b{font-family:var(--f-tit);font-size:18px;display:block;line-height:1.1}
 .barra small{opacity:.85}
 .barra button{border:0;border-radius:12px;background:#FCD71A;color:#1D0A6E;font-weight:800;font-size:15px;padding:12px 16px;cursor:pointer;white-space:nowrap}
+.barra button:focus-visible{outline-color:#FBF5E8}
 @media (prefers-reduced-motion:reduce){.barra{transition:none}}
 
 /* Folhas (dialog) */
@@ -113,7 +114,7 @@ input[type=text],textarea{font:inherit;font-size:16px;color:var(--tinta);backgro
 .linha-add{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .principal{border:0;border-radius:12px;padding:13px 16px;font-weight:800;font-size:16px;cursor:pointer;background:var(--indigo);color:var(--papel);text-align:center;text-decoration:none;display:block}
 .principal.amarelo{background:#FCD71A;color:#1D0A6E}
-.principal.wpp{background:#1f8f4e;color:#fff}
+.principal.wpp{background:#17703f;color:#fff}
 .principal[aria-disabled="true"]{opacity:.4;pointer-events:none}
 .secundario{border:0;background:transparent;color:var(--indigo);text-decoration:underline;font-weight:700;cursor:pointer;padding:4px}
 
