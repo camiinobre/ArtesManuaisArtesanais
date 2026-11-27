@@ -168,20 +168,20 @@ const TAMANHOS = ["PP","P","M","G","GG"];
 const C = (id,tipo,nome,preco,extra={}) => ({id,tipo,nome,preco,...extra});
 const PRODUTOS = {
   canecas:[
-    C("latina-demais","Caneca","Latina demais para ser minimalista",30),
-    C("coragem-de-desagradar","Caneca","Tenha a coragem de desagradar",30),
-    C("praticar-a-rebeldia","Caneca","Praticar a rebeldia de não ser perfeita",30),
-    C("rainha","Caneca","No meu tabuleiro, a rainha ganha o jogo",30),
-    C("tardezinha","Caneca","De tarde não, de tardezinha",30),
-    C("baralho","Caneca","No meu baralho não há rei maior que a dama",30),
-    C("deixa-digam","Caneca","Deixa que digam, que pensem, que falem",30),
-    C("corazon-partio","Caneca","Tiritas pra esse corazón partío",30),
-    C("onca","Caneca","Calma como uma onça",30),
-    C("desobediencia","Caneca","Nunca reverenciar, sempre desobedecer",30),
-    C("nao-vale-a-pena","Caneca","Não vale a pena trazer esse teu amor de volta",30),
-    C("jesus","Caneca","Cristo abençoador",30),
-    C("estrela-marrom","Caneca","Há de surgir uma estrela",30,{cores:["Marrom","Amarela"],fotoCor:{Marrom:"estrela-marrom",Amarela:"estrela-amarela"}}),
-    C("exu-na-defesa","Copo de vidro","Exu na defesa, eu mesma no ataque",20,{estoque:2,pronta:true}),
+    C("latina-demais","Caneca branca","Latina demais para ser minimalista",47,{estoque:1,pronta:true}),
+    C("coragem-de-desagradar","Caneca branca quadrada","Tenha a coragem de desagradar",45,{estoque:1,pronta:true}),
+    C("praticar-a-rebeldia","Caneca","Praticar a rebeldia de não ser perfeita",0,{estoque:1,pronta:true,combinar:true}),
+    C("rainha","Caneca cinza fosca","No meu tabuleiro, a rainha ganha o jogo",47,{estoque:1,pronta:true}),
+    C("tardezinha","Caneca branca","De tarde não, de tardezinha",42,{estoque:1,pronta:true}),
+    C("baralho","Caneca vermelha","No meu baralho não há rei maior que a dama",45,{estoque:1,pronta:true}),
+    C("deixa-digam","Caneca","Deixa que digam, que pensem, que falem",0,{estoque:1,pronta:true,combinar:true}),
+    C("corazon-partio","Caneca preta","Tiritas pra esse corazón partío",38,{estoque:1,pronta:true}),
+    C("onca","Caneca","Calma como uma onça",0,{estoque:1,pronta:true,combinar:true}),
+    C("desobediencia","Caneca creme","Nunca reverenciar, sempre desobedecer",40,{estoque:1,pronta:true}),
+    C("nao-vale-a-pena","Caneca","Não vale a pena trazer esse teu amor de volta",0,{estoque:1,pronta:true,combinar:true}),
+    C("jesus","Caneca terracota","Cristo abençoador",40,{estoque:1,pronta:true}),
+    C("estrela-marrom","Caneca","Há de surgir uma estrela",0,{combinar:true,pronta:true,cores:["Marrom","Amarela"],fotoCor:{Marrom:"estrela-marrom",Amarela:"estrela-amarela"}}),
+    C("exu-na-defesa","Copo de vidro","Exu na defesa, eu mesma no ataque",35,{estoque:2,pronta:true}),
     C("nao-me-comove","Copo americano","Não me comove o pranto de quem é ruim",12,{estoque:5,pronta:true}),
   ],
   quadros:[
@@ -255,7 +255,7 @@ const PRODUTOS = {
   ],
 };
 const ENCOMENDA = [
-  {id:"sua-arte",nome:"Sua arte, sua frase",txt:"Mande a frase ou o desenho e a gente transforma na peça.",bases:[["Caneca",30],["Camiseta",30],["Copo americano",12]]},
+  {id:"sua-arte",nome:"Sua arte, sua frase",txt:"Mande a frase ou o desenho e a gente transforma na peça.",bases:[["Caneca branca",30],["Camiseta",30],["Copo americano",12]]},
   {id:"imas",nome:"Ímãs de geladeira",txt:"Com arte da casa ou a sua foto, para lembrança, festa e brinde."},
   {id:"adesivos",nome:"Adesivos e recortes",txt:"Adesivos e etiquetas recortados na medida, para embalagem ou lembrancinha."},
   {id:"lula",nome:"Estampas Lula e Brasil 13",txt:"Lula Lá, Brasil 13 e outras artes em camiseta e caneca."},
@@ -286,8 +286,8 @@ function cardProduto(p){
   return `<article class="peca"><div class="foto">${foto}${est}</div><div class="corpo">
     <span class="tipo">${esc(p.tipo)}${p.pronta?" · pronta entrega":""}</span>
     ${p.nome?`<h3 class="nome">${esc(p.nome)}</h3>`:""}${opts}
-    <div class="linha-preco"><span class="preco">${brl(p.preco)}</span>
-    <button class="add" data-add="${p.id}" ${resta!==null&&resta<=0?"disabled":""}>Adicionar</button></div></div></article>`;
+    <div class="linha-preco">${p.combinar?`<span class="preco combinar">valor a combinar</span>`:`<span class="preco">${brl(p.preco)}</span>`}
+    <button class="add" data-add="${p.id}" ${resta!==null&&resta<=0?"disabled":""}>${p.combinar?"Pedir orçamento":"Adicionar"}</button></div></div></article>`;
 }
 function cardEncomenda(e){
   if(e.bases) return `<article class="peca"><span class="tipo">Personalizado</span><h3 class="nome">${e.nome}</h3><p>${e.txt}</p>
@@ -354,7 +354,7 @@ document.addEventListener("click",e=>{
     if(p.camiseta){ const cor=$("#cor-"+p.id).value, tam=$("#tam-"+p.id).value; detalhe=`${cor}, ${tam}`; chave+=`|${cor}|${tam}`; }
     if(p.cores){ const cor=$("#cor-"+p.id).value; detalhe=cor; chave+="|"+cor; }
     const max = p.estoque ? p.estoque - qtdNoPedido(p.id) + (pedido.find(x=>x.chave===chave)?.qtd||0) : 0;
-    addItem({chave,prodId:p.id,nome:p.nome||p.desc,tipo:p.tipo,detalhe,preco:p.preco,max:p.estoque?max:0,pronta:!!p.pronta});
+    addItem({chave,prodId:p.id,nome:p.nome||p.desc,tipo:p.tipo,detalhe:p.combinar?[detalhe,"valor a combinar"].filter(Boolean).join(", "):detalhe,preco:p.preco,max:p.estoque?max:0,pronta:!!p.pronta,combinar:!!p.combinar});
   }
   if(t.dataset.enc){
     const en=ENCOMENDA.find(x=>x.id===t.dataset.enc);
